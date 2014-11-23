@@ -1,0 +1,19 @@
+{
+  "name": "lei-utils",
+  "version": "1.0.0",
+  "description": "utils",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leizongmin/node-lei-utils.git"
+  },
+  "author": "Zongmin Lei <leizongmin@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leizongmin/node-lei-utils/issues"
+  },
+  "homepage": "https://github.com/leizongmin/node-lei-utils"
+}
