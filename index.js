@@ -4,6 +4,8 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
+var path = require('path');
+var fs = require('fs');
 var crypto = require('crypto');
 var utils = exports;
 
@@ -80,14 +82,28 @@ exports.decryptData = function (str, secret) {
 };
 
 /**
+ * MD5
+ *
+ * @param {String} filename
+ * @return {Function} callback
+ */
+exports.fileMd5 = function (filename, callback) {
+  fs.readFile(filename, function (err, data) {
+    if (err) return callback(err);
+    callback(null, crypto.createHash('md5').update(data).digest('hex'));
+  });
+};
+
+/**
  * 产生随机字符串
  *
  * @param {Integer} size
+ * @param {String} chars
  * @return {String}
  */
-exports.randomString = function (size) {
+exports.randomString = function (size, chars) {
   size = size || 6;
-  var code_string = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var code_string = chars | 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var max_num = code_string.length + 1;
   var new_pass = '';
   while (size > 0) {
@@ -123,7 +139,7 @@ exports.randomNumber = function (size) {
  */
 exports.randomLetter = function (size) {
   size = size || 6;
-  var code_string = 'abcdefghijklmnopqrstuvwxyz';
+  var code_string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   var max_num = code_string.length + 1;
   var new_pass = '';
   while (size > 0) {
