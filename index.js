@@ -103,7 +103,7 @@ exports.fileMd5 = function (filename, callback) {
  */
 exports.randomString = function (size, chars) {
   size = size || 6;
-  var code_string = chars | 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var code_string = chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var max_num = code_string.length + 1;
   var new_pass = '';
   while (size > 0) {
