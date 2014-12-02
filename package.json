@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/leizongmin/node-lei-utils/issues"
   },
-  "homepage": "https://github.com/leizongmin/node-lei-utils"
+  "homepage": "https://github.com/leizongmin/node-lei-utils",
+  "dependencies": {
+    "lei-cycle": "^1.0.0"
+  }
 }

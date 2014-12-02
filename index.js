@@ -7,6 +7,7 @@
 var path = require('path');
 var fs = require('fs');
 var crypto = require('crypto');
+var cycle = require('lei-cycle');
 var utils = exports;
 
 
@@ -488,3 +489,24 @@ exports.isNumber = function (str) {
 exports.cloneObject = function (obj) {
   return JSON.parse(JSON.stringify(obj));
 };
+
+/**
+ * 合并对象
+ *
+ * @param {Object} a
+ * @param {Object} b
+ * @return {Object}
+ */
+exports.merge = function () {
+  var ret = {};
+  for (var i = 0; i < arguments.length; i++) {
+    var obj = arguments[i];
+    Object.keys(obj).forEach(function (k) {
+      ret[k] = obj[k];
+    });
+  }
+  return ret;
+};
+
+// lei-cycle
+exports.cycle = cycle;
