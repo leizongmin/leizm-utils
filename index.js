@@ -11,6 +11,22 @@ var cycle = require('lei-cycle');
 var utils = exports;
 
 
+var BUG_FREE = fs.readFileSync(path.resolve(__dirname, 'bugfree.txt')).toString();
+
+/**
+ * 佛祖保佑，用无Bug
+ * 图像来源于 https://github.com/ottomao/bugfreejs
+ *
+ * @param {Boolean} doNotOutput 设置为true时不自动打印，仅返回字符串
+ */
+exports.bugfree = function (doNotOutput) {
+  if (doNotOutput) {
+    return BUG_FREE;
+  } else {
+    console.log(BUG_FREE);
+  }
+};
+
 /**
  * 32位MD5加密
  *
