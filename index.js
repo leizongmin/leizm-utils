@@ -524,5 +524,26 @@ exports.merge = function () {
   return ret;
 };
 
+/**
+ * 返回安全的JSON字符串
+ *
+ * @param {Object} data
+ * @param {String|Number} space 缩进
+ * @return {String}
+ */
+exports.jsonStringify = function (data, space) {
+  var seen = [];
+  return JSON.stringify(data, function (key, val) {
+    if (!val || typeof val !== 'object') {
+      return val;
+    }
+    if (seen.indexOf(val) !== -1) {
+      return '[Circular]';
+    }
+    seen.push(val);
+    return val;
+  }, space);
+};
+
 // lei-cycle
 exports.cycle = cycle;
