@@ -547,3 +547,46 @@ exports.jsonStringify = function (data, space) {
 
 // lei-cycle
 exports.cycle = cycle;
+
+/**
+ * 将arguments对象转换成数组
+ *
+ * @param {Object} args
+ * @return {Array}
+ */
+exports.argumentsToArray = function (args) {
+  return Array.prototype.slice.call(args);
+};
+
+/**
+ * 取数组的最后一个元素
+ *
+ * @param {Array} arr
+ * @return {Object}
+ */
+exports.getArrayLastItem = function (arr) {
+  return arr[arr.length - 1];
+};
+
+/**
+ * 异步函数节流
+ *
+ * @param {Function} fn
+ * @param {Number} maxCcoun
+ */
+exports.throttleAsync = function (fn, maxCount) {
+  if (!(maxCount > 1)) maxCount = 1;
+  var counter = 0;
+  return function () {
+    var args = exports.argumentsToArray(arguments);
+    var callback = exports.getArrayLastItem(args);
+    if (counter >= maxCount) return callback(new Error('throttleAsync() out of limit'));
+    args.pop();
+    args.push(function () {
+      counter--;
+      callback.apply(null, arguments);
+    });
+    counter++;
+    fn.apply(null, args);
+  };
+};
