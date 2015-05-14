@@ -8,6 +8,7 @@ var path = require('path');
 var fs = require('fs');
 var crypto = require('crypto');
 var cycle = require('lei-cycle');
+var clone = require('clone');
 var utils = exports;
 
 
@@ -589,4 +590,14 @@ exports.throttleAsync = function (fn, maxCount) {
     counter++;
     fn.apply(null, args);
   };
+};
+
+/**
+ * 克隆对象
+ * 
+ * @param {Object} obj
+ * @return {Object}
+ */
+exports.clone = function (obj) {
+  return clone(obj);
 };

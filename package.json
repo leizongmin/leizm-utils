@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/leizongmin/node-lei-utils",
   "dependencies": {
+    "clone": "^1.0.2",
     "lei-cycle": "^1.0.0"
   }
 }
