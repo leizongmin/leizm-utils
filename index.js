@@ -653,3 +653,58 @@ exports.inherits = function (fn, superConstructor) {
 exports.extend = function () {
   return exports.merge(exports);
 };
+
+
+exports.array = {};
+
+/**
+ * 取数组最后一个元素
+ * 
+ * @param {Array} arr
+ * @return {Object}
+ */
+exports.array.last = function (arr) {
+  return arr[arr.length - 1];
+};
+
+/**
+ * 取数组第一个元素
+ * 
+ * @param {Array} arr
+ * @return {Object}
+ */
+exports.array.head = function (arr) {
+  return arr[0];
+};
+
+/**
+ * 取数组除第一个之外的元素
+ * 
+ * @param {Array} arr
+ * @return {Object}
+ */
+exports.array.rest = function (arr) {
+  return arr.slice(1);
+};
+
+/**
+ * 复制一个数组
+ * 
+ * @param {Array} arr
+ * @return {Object}
+ */
+exports.array.copy = function (arr) {
+  return arr.slice();
+};
+
+/**
+ * 组合一组数组
+ * 
+ * @param {Array} a
+ * @param {Array} b
+ * @return {Object}
+ */
+exports.array.concat = function () {
+  var ret = [];
+  return ret.concat.apply(ret, arguments);
+};

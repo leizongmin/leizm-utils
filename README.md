@@ -37,6 +37,7 @@ $ npm install lei-utils --save
 + `inheritsEventEmitter (fn)`
 + `inherits (fn, superConstructor)`
 + `extend ()`
++ `array` **object**
 
 
 
