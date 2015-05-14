@@ -1,5 +1,12 @@
 # node-lei-utils
 
+安装
+
+```bash
+$ npm install lei-utils --save
+```
+
+
 一些常用的工具函数
 
 + `bugfree (doNotOutput)`
@@ -27,6 +34,9 @@
 + `clone (obj)`
 + `createNamespace ()`
 + `download (url, target, callback)`
++ `inheritsEventEmitter (fn)`
++ `inherits (fn, superConstructor)`
++ `extend ()`
 
 
 
