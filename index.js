@@ -10,6 +10,7 @@ var crypto = require('crypto');
 var cycle = require('lei-cycle');
 var clone = require('clone');
 var createNamespace = require('lei-ns').Namespace;
+var download = require('lei-download');
 var utils = exports;
 
 
@@ -610,4 +611,15 @@ exports.clone = function (obj) {
  */
 exports.createNamespace = function () {
   return createNamespace();
+};
+
+/**
+ * 下载文件
+ * 
+ * @param {String} url
+ * @param {String} target
+ * @param {Function} callback
+ */
+exports.download = function (url, target, callback) {
+  download.apply(null, arguments);
 };

@@ -19,6 +19,7 @@
   "dependencies": {
     "clone": "^1.0.2",
     "lei-cycle": "^1.0.0",
+    "lei-download": "^0.1.1",
     "lei-ns": "^0.1.2"
   }
 }
