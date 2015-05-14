@@ -9,6 +9,7 @@ var fs = require('fs');
 var crypto = require('crypto');
 var cycle = require('lei-cycle');
 var clone = require('clone');
+var createNamespace = require('lei-ns').Namespace;
 var utils = exports;
 
 
@@ -600,4 +601,13 @@ exports.throttleAsync = function (fn, maxCount) {
  */
 exports.clone = function (obj) {
   return clone(obj);
+};
+
+/**
+ * 创建命名空间对象
+ * 
+ * @return {Function}
+ */
+exports.createNamespace = function () {
+  return createNamespace();
 };
