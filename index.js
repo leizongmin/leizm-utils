@@ -6,6 +6,8 @@
 
 var path = require('path');
 var fs = require('fs');
+var util = require('util');
+var events = require('events');
 var crypto = require('crypto');
 var cycle = require('lei-cycle');
 var clone = require('clone');
@@ -622,4 +624,23 @@ exports.createNamespace = function () {
  */
 exports.download = function (url, target, callback) {
   download.apply(null, arguments);
+};
+
+/**
+ * 继承EventEmitter
+ *
+ * @param {Function} fn
+ */
+exports.inheritsEventEmitter = function (fn) {
+  return util.inherits(fn, events.EventEmitter);
+};
+
+/**
+ * 继承
+ * 
+ * @param {Function} fn
+ * @param {Function} superConstructor
+ */
+exports.inherits = function (fn, superConstructor) {
+  return util.inherits(fn, superConstructor);
 };
