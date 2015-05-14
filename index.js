@@ -644,3 +644,12 @@ exports.inheritsEventEmitter = function (fn) {
 exports.inherits = function (fn, superConstructor) {
   return util.inherits(fn, superConstructor);
 };
+
+/**
+ * 扩展utils
+ *
+ * @return {Object}
+ */
+exports.extend = function () {
+  return exports.merge(exports);
+};
