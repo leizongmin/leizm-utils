@@ -2,31 +2,7 @@
 
 一些常用的工具函数
 
-+ `bugfree (doNotOutput)`
-+ `md5 (text)`
-+ `encryptPassword (password)`
-+ `validatePassword (password, encrypted)`
-+ `encryptData (data, secret)`
-+ `decryptData (str, secret)`
-+ `fileMd5 (filename, callback)`
-+ `randomString (size, chars)`
-+ `randomNumber (size)`
-+ `randomLetter (size)`
-+ `date (format, timestamp)`
-+ `noop (err)`
-+ `isString (str)`
-+ `isInteger (str)`
-+ `isNumber (str)`
-+ `cloneObject (obj)`
-+ `merge ()`
-+ `jsonStringify (data, space)`
-+ `cycle (list)`
-+ `argumentsToArray (args)`
-+ `getArrayLastItem (arr)`
-+ `throttleAsync (fn, maxCount)`
-+ `clone (obj)`
-+ `createNamespace ()`
-+ `download (url, target, callback)`
+{{EXPORTS}}
 
 
 
