@@ -598,7 +598,7 @@ exports.throttleAsync = function (fn, maxCount) {
 
 /**
  * 克隆对象
- * 
+ *
  * @param {Object} obj
  * @return {Object}
  */
@@ -608,7 +608,7 @@ exports.clone = function (obj) {
 
 /**
  * 创建命名空间对象
- * 
+ *
  * @return {Function}
  */
 exports.createNamespace = function () {
@@ -617,7 +617,7 @@ exports.createNamespace = function () {
 
 /**
  * 下载文件
- * 
+ *
  * @param {String} url
  * @param {String} target
  * @param {Function} callback
@@ -637,7 +637,7 @@ exports.inheritsEventEmitter = function (fn) {
 
 /**
  * 继承
- * 
+ *
  * @param {Function} fn
  * @param {Function} superConstructor
  */
@@ -659,7 +659,7 @@ exports.array = {};
 
 /**
  * 取数组最后一个元素
- * 
+ *
  * @param {Array} arr
  * @return {Object}
  */
@@ -669,7 +669,7 @@ exports.array.last = function (arr) {
 
 /**
  * 取数组第一个元素
- * 
+ *
  * @param {Array} arr
  * @return {Object}
  */
@@ -679,7 +679,7 @@ exports.array.head = function (arr) {
 
 /**
  * 取数组除第一个之外的元素
- * 
+ *
  * @param {Array} arr
  * @return {Object}
  */
@@ -689,7 +689,7 @@ exports.array.rest = function (arr) {
 
 /**
  * 复制一个数组
- * 
+ *
  * @param {Array} arr
  * @return {Object}
  */
@@ -699,7 +699,7 @@ exports.array.copy = function (arr) {
 
 /**
  * 组合一组数组
- * 
+ *
  * @param {Array} a
  * @param {Array} b
  * @return {Object}
