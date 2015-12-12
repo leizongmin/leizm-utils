@@ -814,8 +814,12 @@ exports.promisifyRequire = function (name) {
   var mod = require(name);
   var ret = {};
   for (var i in mod) {
-    if (i.slice(-4) !== 'Sync' && typeof mod[i] === 'function') {
-      ret[i] = exports.promisify(mod[i].bind(mod));
+    if (typeof mod[i] === 'function') {
+      if (i.slice(-4) !== 'Sync') {
+        ret[i] = exports.promisify(mod[i].bind(mod));
+      } else {
+        ret[i] = mod[i].bind(mod);
+      }
     }
   }
   return ret;
