@@ -38,6 +38,9 @@ $ npm install lei-utils --save
 + `inherits (fn, superConstructor)`
 + `extend ()`
 + `array` **object**
++ `promisify (fn, argc)`
++ `callbackify (fn, argc)`
++ `promisifyRequire (name)`
 
 
 
