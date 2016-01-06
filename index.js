@@ -39,6 +39,7 @@ exports.bugfree = function (doNotOutput) {
  * @return {string}
  */
 exports.md5 = function (text) {
+  if (!Buffer.isBuffer(text)) text = new Buffer(text);
   return crypto.createHash('md5').update(text).digest('hex');
 };
 
