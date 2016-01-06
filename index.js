@@ -9,10 +9,6 @@ var fs = require('fs');
 var util = require('util');
 var events = require('events');
 var crypto = require('crypto');
-var cycle = require('lei-cycle');
-var clone = require('clone');
-var createNamespace = require('lei-ns').Namespace;
-var download = require('lei-download');
 var utils = exports;
 
 
@@ -551,9 +547,6 @@ exports.jsonStringify = function (data, space) {
   }, space);
 };
 
-// lei-cycle
-exports.cycle = cycle;
-
 /**
  * 将arguments对象转换成数组
  *
@@ -595,36 +588,6 @@ exports.throttleAsync = function (fn, maxCount) {
     counter++;
     fn.apply(null, args);
   };
-};
-
-/**
- * 克隆对象
- *
- * @param {Object} obj
- * @return {Object}
- */
-exports.clone = function (obj) {
-  return clone(obj);
-};
-
-/**
- * 创建命名空间对象
- *
- * @return {Function}
- */
-exports.createNamespace = function () {
-  return createNamespace();
-};
-
-/**
- * 下载文件
- *
- * @param {String} url
- * @param {String} target
- * @param {Function} callback
- */
-exports.download = function (url, target, callback) {
-  download.apply(null, arguments);
 };
 
 /**
@@ -708,120 +671,4 @@ exports.array.copy = function (arr) {
 exports.array.concat = function () {
   var ret = [];
   return ret.concat.apply(ret, arguments);
-};
-
-/**
- * Promisify
- *
- * @param {Function} fn
- * @param {Number} argc
- * @return {Function}
- *
-```
-function sleep(ms, callback) {
-  console.log(`sleep(${ms})`);
-  setTimeout(function () {
-    console.log(`sleep(${ms}) callback`);
-    callback('Error', ms);
-  }, ms);
-}
-
-var s = promisify(sleep,);
-s(10, function (err, ret) {
-  console.log(`callback ${err}, ${ret}`);
-}).then(function () {
-  console.log(ret);
-}).catch(function (err) {
-  console.log(err);
-});
-```
- */
-exports.promisify = function (fn, argc) {
-  if (typeof argc === 'undefined' || argc === null || argc === false || argc < 0) {
-    argc = fn.length;
-  }
-  return function () {
-    var _this = this;
-    var args = Array.prototype.slice.call(arguments);
-    return new Promise(function (resolve, reject) {
-      var callback = args[argc - 1];
-      var newArgs = args.slice(0, argc - 1);
-      newArgs.push(function (err) {
-        var args = Array.prototype.slice.call(arguments);
-        if (err) {
-          reject(err);
-        } else {
-          resolve(args.slice(1));
-        }
-        if (typeof callback === 'function') {
-          callback.apply(_this, args);
-        }
-      });
-      fn.apply(_this, newArgs);
-    });
-  };
-};
-
-/**
- * Callbackify
- *
- * @param {Function} fn
- * @param {Number} argc
- * @return {Function}
- *
-function sleep(ms) {
-  return new Promise(function (resolve, reject) {
-    setTimeout(function () {
-      resolve(ms);
-    }, ms);
-  });
-}
-
-var s = callbackify(sleep);
-s(10, function (err, ret) {
-  console.log('callback', err, ret);
-}).then(function (ret) {
-  console.log('then', ret);
-}).catch(function (err) {
-  console.log('catch', err);
-});
- */
-exports.callbackify = function (fn, argc) {
-  if (typeof argc === 'undefined' || argc === null || argc === false || argc < 0) {
-    argc = fn.length;
-  }
-  return function () {
-    var callback = arguments[argc];
-    if (typeof callback !== 'function') callback = null;
-    return fn.apply(this, arguments)
-      .then(function (ret) {
-        callback && callback(null, ret);
-        return Promise.resolve(ret);
-      })
-      .catch(function (err) {
-        callback && callback(err);
-        return Promise.reject(err);
-      });
-  }
-};
-
-/**
- * Promisify Module
- *
- * @param {Function} fn
- * @return {Function}
- */
-exports.promisifyRequire = function (name) {
-  var mod = require(name);
-  var ret = {};
-  for (var i in mod) {
-    if (typeof mod[i] === 'function') {
-      if (i.slice(-4) !== 'Sync') {
-        ret[i] = exports.promisify(mod[i].bind(mod));
-      } else {
-        ret[i] = mod[i].bind(mod);
-      }
-    }
-  }
-  return ret;
 };

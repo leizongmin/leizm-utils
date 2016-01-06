@@ -27,20 +27,13 @@ $ npm install lei-utils --save
 + `cloneObject (obj)`
 + `merge ()`
 + `jsonStringify (data, space)`
-+ `cycle (list)`
 + `argumentsToArray (args)`
 + `getArrayLastItem (arr)`
 + `throttleAsync (fn, maxCount)`
-+ `clone (obj)`
-+ `createNamespace ()`
-+ `download (url, target, callback)`
 + `inheritsEventEmitter (fn)`
 + `inherits (fn, superConstructor)`
 + `extend ()`
 + `array` **object**
-+ `promisify (fn, argc)`
-+ `callbackify (fn, argc)`
-+ `promisifyRequire (name)`
 
 
 

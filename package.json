@@ -1,6 +1,6 @@
 {
   "name": "lei-utils",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "utils",
   "main": "index.js",
   "scripts": {
@@ -17,12 +17,7 @@
     "url": "https://github.com/leizongmin/node-lei-utils/issues"
   },
   "homepage": "https://github.com/leizongmin/node-lei-utils",
-  "dependencies": {
-    "clone": "^1.0.2",
-    "lei-cycle": "^1.0.0",
-    "lei-download": "^0.2.0",
-    "lei-ns": "^0.1.2"
-  },
+  "dependencies": {},
   "engines": {
     "node": ">= 4.0.0"
   }
