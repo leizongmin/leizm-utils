@@ -11,11 +11,11 @@ $ npm install lei-utils --save
 
 + `bugfree (doNotOutput)`
 + `md5 (text)`
++ `fileMd5 (filename, callback)`
 + `encryptPassword (password)`
 + `validatePassword (password, encrypted)`
 + `encryptData (data, secret)`
 + `decryptData (str, secret)`
-+ `fileMd5 (filename, callback)`
 + `randomString (size, chars)`
 + `randomNumber (size)`
 + `randomLetter (size)`
