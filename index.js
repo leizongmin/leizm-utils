@@ -40,6 +40,19 @@ exports.md5 = function (text) {
 };
 
 /**
+ * MD5
+ *
+ * @param {String} filename
+ * @return {Function} callback
+ */
+exports.fileMd5 = function (filename, callback) {
+  fs.readFile(filename, function (err, data) {
+    if (err) return callback(err);
+    callback(null, exports.md5(data));
+  });
+};
+
+/**
  * 加密密码
  *
  * @param {string} password
@@ -98,19 +111,6 @@ exports.decryptData = function (str, secret) {
   dec += decipher.final('utf8');
   var data = JSON.parse(dec);
   return data;
-};
-
-/**
- * MD5
- *
- * @param {String} filename
- * @return {Function} callback
- */
-exports.fileMd5 = function (filename, callback) {
-  fs.readFile(filename, function (err, data) {
-    if (err) return callback(err);
-    callback(null, crypto.createHash('md5').update(data).digest('hex'));
-  });
 };
 
 /**
