@@ -122,14 +122,13 @@ exports.decryptData = function (str, secret) {
  */
 exports.randomString = function (size, chars) {
   size = size || 6;
-  var code_string = chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var max_num = code_string.length + 1;
-  var new_pass = '';
-  while (size > 0) {
-    new_pass += code_string.charAt(Math.floor(Math.random() * max_num));
-    size--;
+  chars = chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var max = chars.length;
+  var ret = '';
+  for (var i = 0; i < size; i++) {
+    ret += chars.charAt(Math.floor(Math.random() * max));
   }
-  return new_pass;
+  return ret;
 };
 
 /**
@@ -139,15 +138,7 @@ exports.randomString = function (size, chars) {
  * @return {String}
  */
 exports.randomNumber = function (size) {
-  size = size || 6;
-  var code_string = '0123456789';
-  var max_num = code_string.length + 1;
-  var new_pass = '';
-  while (size > 0) {
-    new_pass += code_string.charAt(Math.floor(Math.random() * max_num));
-    size--;
-  }
-  return new_pass;
+  return exports.randomString(size, '0123456789');
 };
 
 /**
@@ -157,15 +148,7 @@ exports.randomNumber = function (size) {
  * @return {String}
  */
 exports.randomLetter = function (size) {
-  size = size || 6;
-  var code_string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  var max_num = code_string.length + 1;
-  var new_pass = '';
-  while (size > 0) {
-    new_pass += code_string.charAt(Math.floor(Math.random() * max_num));
-    size--;
-  }
-  return new_pass;
+  return exports.randomString(size, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
 };
 
 /**
