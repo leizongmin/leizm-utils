@@ -34,6 +34,7 @@ $ npm install lei-utils --save
 + `inherits (fn, superConstructor)`
 + `extend ()`
 + `array` **object**
++ `customError (name)`
 
 
 

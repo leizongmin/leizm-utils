@@ -669,4 +669,3 @@ exports.customError = function (name) {
 name + '.prototype = Error.prototype;' + name;
   return eval(code);
 };
-customError();
