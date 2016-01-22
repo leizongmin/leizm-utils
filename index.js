@@ -655,3 +655,18 @@ exports.array.concat = function () {
   var ret = [];
   return ret.concat.apply(ret, arguments);
 };
+
+exports.customError = function (name) {
+  name = name || 'CustomError';
+  var code = '' +
+'function ' + name + '(message, info) {\n' +
+'  Error.captureStackTrace(this, ' + name + ');\n' +
+'  this.name = "' + name + '";\n' +
+'  this.message = (message || "");\n' +
+'  info = info || {};\n' +
+'  for (var i in info) this[i] = info[i];\n' +
+'}\n' +
+name + '.prototype = Error.prototype;' + name;
+  return eval(code);
+};
+customError();
