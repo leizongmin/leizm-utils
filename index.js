@@ -656,15 +656,17 @@ exports.array.concat = function () {
   return ret.concat.apply(ret, arguments);
 };
 
-exports.customError = function (name) {
+exports.customError = function (name, info) {
   name = name || 'CustomError';
+  info = info || {};
   var code = '' +
-'function ' + name + '(message, info) {\n' +
+'function ' + name + '(message, info2) {\n' +
 '  Error.captureStackTrace(this, ' + name + ');\n' +
 '  this.name = "' + name + '";\n' +
 '  this.message = (message || "");\n' +
-'  info = info || {};\n' +
+'  info2 = info2 || {};\n' +
 '  for (var i in info) this[i] = info[i];\n' +
+'  for (var i in info2) this[i] = info2[i];\n' +
 '}\n' +
 name + '.prototype = Error.prototype;' + name;
   return eval(code);
