@@ -1,3 +1,4 @@
+function data() {/*
 
                                  _oo8oo_
                                 o8888888o
@@ -22,3 +23,7 @@
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                          佛祖保佑         永无bug
+
+*/}
+
+module.exports = data.toString().split('\n').slice(1, -1).join('\n');

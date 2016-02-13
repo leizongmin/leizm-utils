@@ -4,7 +4,6 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-var path = require('path');
 var fs = require('fs');
 var util = require('util');
 var events = require('events');
@@ -12,7 +11,7 @@ var crypto = require('crypto');
 var utils = exports;
 
 
-var BUG_FREE = fs.readFileSync(path.resolve(__dirname, 'bugfree.txt')).toString();
+var BUG_FREE = require('./bugfree');
 
 /**
  * 佛祖保佑，用无Bug
