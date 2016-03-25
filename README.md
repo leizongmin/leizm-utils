@@ -35,6 +35,9 @@ $ npm install lei-utils --save
 + `extend ()`
 + `array` **object**
 + `customError (name, info)`
++ `isPromise (p)`
++ `async` **object**
++ `promise` **object**
 
 
 
