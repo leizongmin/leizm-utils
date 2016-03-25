@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * lei-utils tests
  *
@@ -84,6 +86,87 @@ describe('promise', function () {
         assert.equal(err.message, 'hello');
         done();
       });
+
+    });
+
+  });
+
+  describe('all', function () {
+
+    it('array - success', function (done) {
+
+      function sleep(ms, msg, callback) {
+        return new Promise((resolve, reject) => {
+          setTimeout(function () {
+            resolve(msg);
+          }, ms);
+        });
+      }
+
+      utils.promise.all([
+        sleep(50, 'AA'),
+        sleep(100, 'BB'),
+        sleep(30, 'CC'),
+        sleep(0, 'DD'),
+      ])
+      .then(ret => {
+        assert.deepEqual(ret, [[null, 'AA'], [null, 'BB'], [null, 'CC'], [null, 'DD']]);
+        done();
+      })
+      .catch(done);
+
+    });
+
+    it('flat - success', function (done) {
+
+      function sleep(ms, msg, callback) {
+        return new Promise((resolve, reject) => {
+          setTimeout(function () {
+            resolve(msg);
+          }, ms);
+        });
+      }
+
+      utils.promise.all(
+        sleep(50, 'AA'),
+        sleep(100, 'BB'),
+        sleep(30, 'CC'),
+        sleep(0, 'DD')
+      )
+      .then(ret => {
+        assert.deepEqual(ret, [[null, 'AA'], [null, 'BB'], [null, 'CC'], [null, 'DD']]);
+        done();
+      })
+      .catch(done);
+
+    });
+
+    it('flat - error', function (done) {
+
+      function sleep(ms, msg, callback) {
+        return new Promise((resolve, reject) => {
+          setTimeout(function () {
+            reject(new Error(msg));
+          }, ms);
+        });
+      }
+
+      utils.promise.all(
+        sleep(50, 'AA'),
+        sleep(100, 'BB'),
+        sleep(30, 'CC'),
+        sleep(0, 'DD')
+      )
+      .then(ret => {
+        const msgs = [];
+        for (const item of ret) {
+          assert.equal(item[0] instanceof Error, true);
+          msgs.push(item[0].message);
+        }
+        assert.deepEqual(msgs, ['AA', 'BB', 'CC', 'DD']);
+        done();
+      })
+      .catch(done);
 
     });
 

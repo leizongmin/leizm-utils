@@ -708,7 +708,11 @@ exports.promise.call = function (fn) {
         resolve(ret);
       }
     });
-    var ret = fn.apply(null, args);
+    try {
+      var ret = fn.apply(null, args);
+    } catch (err) {
+      return reject(err);
+    }
     if (utils.isPromise(ret)) {
       ret.then(resolve).catch(reject);
     }
@@ -720,8 +724,8 @@ exports.promise.call = function (fn) {
  *
  * @return {Object}
  */
-exports.promise.all = function () {
-  var args = utils.argumentsToArray(arguments);
+exports.promise.all = function (_args) {
+  var args = Array.isArray(_args) ? _args : utils.argumentsToArray(arguments);
   return new Promise(function (resolve, reject) {
     var results = [];
     var counter = 0;
@@ -733,10 +737,10 @@ exports.promise.all = function () {
     }
     args.forEach(function (p, i) {
       p.then(function (ret) {
-        results[i] = ret;
+        results[i] = [null, ret];
         check();
       }).catch(function (err) {
-        results[i] = err;
+        results[i] = [err];
         check();
       });
     });
