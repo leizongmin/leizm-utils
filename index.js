@@ -47,7 +47,7 @@ exports.md5 = function (text) {
 exports.fileMd5 = function (filename, callback) {
   fs.readFile(filename, function (err, data) {
     if (err) return callback(err);
-    callback(null, exports.md5(data));
+    callback(null, utils.md5(data));
   });
 };
 
@@ -137,7 +137,7 @@ exports.randomString = function (size, chars) {
  * @return {String}
  */
 exports.randomNumber = function (size) {
-  return exports.randomString(size, '0123456789');
+  return utils.randomString(size, '0123456789');
 };
 
 /**
@@ -147,7 +147,7 @@ exports.randomNumber = function (size) {
  * @return {String}
  */
 exports.randomLetter = function (size) {
-  return exports.randomString(size, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
+  return utils.randomString(size, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
 };
 
 /**
@@ -559,8 +559,8 @@ exports.throttleAsync = function (fn, maxCount) {
   if (!(maxCount > 1)) maxCount = 1;
   var counter = 0;
   return function () {
-    var args = exports.argumentsToArray(arguments);
-    var callback = exports.getArrayLastItem(args);
+    var args = utils.argumentsToArray(arguments);
+    var callback = utils.getArrayLastItem(args);
     if (counter >= maxCount) return callback(new Error('throttleAsync() out of limit'));
     args.pop();
     args.push(function () {
@@ -597,7 +597,7 @@ exports.inherits = function (fn, superConstructor) {
  * @return {Object}
  */
 exports.extend = function () {
-  return exports.merge(exports);
+  return utils.merge(exports);
 };
 
 
@@ -655,6 +655,13 @@ exports.array.concat = function () {
   return ret.concat.apply(ret, arguments);
 };
 
+/**
+ * 生成自定义Error类型
+ *
+ * @param {String} name
+ * @param {Object} info
+ * @return {Function}
+ */
 exports.customError = function (name, info) {
   name = name || 'CustomError';
   info = info || {};
@@ -669,4 +676,69 @@ exports.customError = function (name, info) {
 '}\n' +
 name + '.prototype = Error.prototype;' + name;
   return eval(code);
+};
+
+/**
+ * 判断是否为Promise对象
+ *
+ * @param {Object} p
+ * @return {Boolean}
+ */
+exports.isPromise = function (p) {
+  return (p && p.then && typeof p.then === 'function' && p.catch && typeof p.catch === 'function');
+};
+
+exports.async = {};
+
+exports.promise = {};
+
+/**
+ * 调用异步函数（传参时不包含末尾的callback），返回一个Promise对象
+ *
+ * @param {Function} fn
+ * @return {Object}
+ */
+exports.promise.call = function (fn) {
+  var args = utils.argumentsToArray(arguments).slice(1);
+  return new Promise(function (resolve, reject) {
+    args.push(function (err, ret) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(ret);
+      }
+    });
+    var ret = fn.apply(null, args);
+    if (utils.isPromise(ret)) {
+      ret.then(resolve).catch(reject);
+    }
+  });
+};
+
+/**
+ * 等待所有Promise执行完毕
+ *
+ * @return {Object}
+ */
+exports.promise.all = function () {
+  var args = utils.argumentsToArray(arguments);
+  return new Promise(function (resolve, reject) {
+    var results = [];
+    var counter = 0;
+    function check () {
+      counter++;
+      if (counter === args.length) {
+        resolve(results);
+      }
+    }
+    args.forEach(function (p, i) {
+      p.then(function (ret) {
+        results[i] = ret;
+        check();
+      }).catch(function (err) {
+        results[i] = err;
+        check();
+      });
+    });
+  });
 };
