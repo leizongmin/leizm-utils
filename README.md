@@ -10,7 +10,9 @@ $ npm install lei-utils --save
 一些常用的工具函数
 
 + `bugfree (doNotOutput)`
++ `sha1 (text)`
 + `md5 (text)`
++ `fileSha1 (filename, callback)`
 + `fileMd5 (filename, callback)`
 + `encryptPassword (password)`
 + `validatePassword (password, encrypted)`
@@ -33,11 +35,19 @@ $ npm install lei-utils --save
 + `inheritsEventEmitter (fn)`
 + `inherits (fn, superConstructor)`
 + `extend ()`
-+ `array` **object**
++ `array`
+  + `last (arr)`
+  + `head (arr)`
+  + `first (arr)`
+  + `rest (arr)`
+  + `copy (arr)`
+  + `concat ()`
 + `customError (name, info)`
 + `isPromise (p)`
-+ `async` **object**
-+ `promise` **object**
++ `async`
++ `promise`
+  + `call (fn)`
+  + `all (_args)`
 
 
 

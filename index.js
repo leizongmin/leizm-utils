@@ -648,6 +648,16 @@ exports.array.head = function (arr) {
 };
 
 /**
+ * 取数组第一个元素
+ *
+ * @param {Array} arr
+ * @return {Object}
+ */
+exports.array.first = function (arr) {
+  return arr[0];
+};
+
+/**
  * 取数组除第一个之外的元素
  *
  * @param {Array} arr

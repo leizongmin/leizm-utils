@@ -18,7 +18,12 @@ for (var i in utils) {
   if (typeof utils[i] === 'function') {
     list.push('+ `' + i + ' (' + getFunctionArguments(utils[i]).join(', ') + ')`');
   } else {
-    list.push('+ `' + i + '` **' + (typeof utils[i]) + '**');
+    list.push('+ `' + i + '`');
+    for (var j in utils[i]) {
+      if (typeof utils[i][j] === 'function') {
+        list.push('  + `' + j + ' (' + getFunctionArguments(utils[i][j]).join(', ') + ')`');
+      }
+    }
   }
 }
 
