@@ -28,7 +28,18 @@ exports.bugfree = function (doNotOutput) {
 };
 
 /**
- * 32位MD5加密
+ * 40位SHA1值
+ *
+ * @param {string} text 文本
+ * @return {string}
+ */
+exports.sha1 = function (text) {
+  if (!Buffer.isBuffer(text)) text = new Buffer(text);
+  return crypto.createHash('sha1').update(text).digest('hex');
+};
+
+/**
+ * 32位MD5值
  *
  * @param {string} text 文本
  * @return {string}
@@ -39,7 +50,20 @@ exports.md5 = function (text) {
 };
 
 /**
- * MD5
+ * 取文件内容的SHA1
+ *
+ * @param {String} filename
+ * @return {Function} callback
+ */
+exports.fileSha1 = function (filename, callback) {
+  fs.readFile(filename, function (err, data) {
+    if (err) return callback(err);
+    callback(null, utils.sha1(data));
+  });
+};
+
+/**
+ * 取文件内容的MD5
  *
  * @param {String} filename
  * @return {Function} callback
