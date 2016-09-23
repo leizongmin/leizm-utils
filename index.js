@@ -1,17 +1,20 @@
+'use strict';
+
 /**
  * lei-utils
  *
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-var fs = require('fs');
-var util = require('util');
-var events = require('events');
-var crypto = require('crypto');
-var utils = exports;
+const fs = require('fs');
+const util = require('util');
+const events = require('events');
+const crypto = require('crypto');
+const stream = require('stream');
+const utils = exports;
 
 
-var BUG_FREE = require('./bugfree');
+const BUG_FREE = require('./bugfree');
 
 /**
  * 佛祖保佑，用无Bug
@@ -22,31 +25,38 @@ var BUG_FREE = require('./bugfree');
 exports.bugfree = function (doNotOutput) {
   if (doNotOutput) {
     return BUG_FREE;
-  } else {
-    console.log(BUG_FREE);
   }
+  console.log(BUG_FREE);
 };
+
+/**
+ * format
+ *
+ * @param {String} str
+ * @param {Mixed} param1
+ * @param {Mixed} param2
+ * @return {String}
+ */
+exports.format = util.format;
 
 /**
  * 40位SHA1值
  *
- * @param {string} text 文本
- * @return {string}
+ * @param {String} text 文本
+ * @return {String}
  */
 exports.sha1 = function (text) {
-  if (!Buffer.isBuffer(text)) text = new Buffer(text);
-  return crypto.createHash('sha1').update(text).digest('hex');
+  return crypto.createHash('sha1').update(utils.toBuffer(text)).digest('hex');
 };
 
 /**
  * 32位MD5值
  *
- * @param {string} text 文本
- * @return {string}
+ * @param {String} text 文本
+ * @return {String}
  */
 exports.md5 = function (text) {
-  if (!Buffer.isBuffer(text)) text = new Buffer(text);
-  return crypto.createHash('md5').update(text).digest('hex');
+  return crypto.createHash('md5').update(utils.toBuffer(text)).digest('hex');
 };
 
 /**
@@ -76,33 +86,44 @@ exports.fileMd5 = function (filename, callback) {
 };
 
 /**
+ * 取哈希值
+ *
+ * @param {String} method 方法，如 md5, sha1, sha256
+ * @param {String|Buffer} text 数据
+ * @return {String}
+ */
+exports.hash = function (method, text) {
+  return crypto.createHash(method).update(utils.toBuffer(text)).digest('hex');
+};
+
+/**
  * 加密密码
  *
- * @param {string} password
- * @return {string}
+ * @param {String} password
+ * @return {String}
  */
 exports.encryptPassword = function (password) {
-  var random = utils.md5(Math.random() + '' + Math.random()).toUpperCase();
-  var left = random.substr(0, 2);
-  var right = random.substr(-2);
-  var newpassword = utils.md5(left + password + right).toUpperCase();
-  return [left, newpassword, right].join(':');
+  const random = utils.md5(Math.random() + '' + Math.random()).toUpperCase();
+  const left = random.substr(0, 2);
+  const right = random.substr(-2);
+  const newpassword = utils.md5(left + password + right).toUpperCase();
+  return [ left, newpassword, right ].join(':');
 };
 
 /**
  * 验证密码
  *
- * @param {string} password 待验证的密码
- * @param {string} encrypted 密码加密字符串
+ * @param {String} password 待验证的密码
+ * @param {String} encrypted 密码加密字符串
  * @return {bool}
  */
 exports.validatePassword = function (password, encrypted) {
-  var random = encrypted.toUpperCase().split(':');
+  const random = encrypted.toUpperCase().split(':');
   if (random.length < 3) return false;
-  var left = random[0];
-  var right = random[2];
-  var main = random[1];
-  var newpassword = utils.md5(left + password + right).toUpperCase();
+  const left = random[0];
+  const right = random[2];
+  const main = random[1];
+  const newpassword = utils.md5(left + password + right).toUpperCase();
   return newpassword === main;
 };
 
@@ -114,9 +135,9 @@ exports.validatePassword = function (password, encrypted) {
  * @return {String}
  */
 exports.encryptData = function (data, secret) {
-  var str = JSON.stringify(data);
-  var cipher = crypto.createCipher('aes192', secret);
-  var enc = cipher.update(str, 'utf8', 'hex');
+  const str = JSON.stringify(data);
+  const cipher = crypto.createCipher('aes192', secret);
+  let enc = cipher.update(str, 'utf8', 'hex');
   enc += cipher.final('hex');
   return enc;
 };
@@ -129,10 +150,10 @@ exports.encryptData = function (data, secret) {
  * @return {Mixed}
  */
 exports.decryptData = function (str, secret) {
-  var decipher = crypto.createDecipher('aes192', secret);
-  var dec = decipher.update(str, 'hex', 'utf8');
+  const decipher = crypto.createDecipher('aes192', secret);
+  let dec = decipher.update(str, 'hex', 'utf8');
   dec += decipher.final('utf8');
-  var data = JSON.parse(dec);
+  const data = JSON.parse(dec);
   return data;
 };
 
@@ -146,9 +167,9 @@ exports.decryptData = function (str, secret) {
 exports.randomString = function (size, chars) {
   size = size || 6;
   chars = chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var max = chars.length;
-  var ret = '';
-  for (var i = 0; i < size; i++) {
+  const max = chars.length;
+  let ret = '';
+  for (let i = 0; i < size; i++) {
     ret += chars.charAt(Math.floor(Math.random() * max));
   }
   return ret;
@@ -238,23 +259,22 @@ exports.date = function (format, timestamp) {
   //   example 9: date('W Y-m-d', 1293974054); // 2011-01-02
   //   returns 9: '52 2011-01-02'
 
-  var that = this;
-  var jsdate, f;
+  let jsdate, f;
   // Keep this here (works, but for code commented-out below for file size reasons)
   // var tal= [];
-  var txt_words = [
+  const txt_words = [
     'Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Satur',
     'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
   // trailing backslash -> (dropped)
   // a backslash followed by any character (including backslash) -> the character
   // empty string -> empty string
-  var formatChr = /\\?(.?)/gi;
-  var formatChrCb = function(t, s) {
+  const formatChr = /\\?(.?)/gi;
+  const formatChrCb = function (t, s) {
     return f[t] ? f[t]() : s;
   };
-  var _pad = function(n, c) {
+  const _pad = function (n, c) {
     n = String(n);
     while (n.length < c) {
       n = '0' + n;
@@ -263,153 +283,187 @@ exports.date = function (format, timestamp) {
   };
   f = {
     // Day
-    d: function() { // Day of month w/leading 0; 01..31
+    d() {
+      // Day of month w/leading 0; 01..31
       return _pad(f.j(), 2);
     },
-    D: function() { // Shorthand day name; Mon...Sun
+    D() {
+      // Shorthand day name; Mon...Sun
       return f.l()
         .slice(0, 3);
     },
-    j: function() { // Day of month; 1..31
+    j() {
+      // Day of month; 1..31
       return jsdate.getDate();
     },
-    l: function() { // Full day name; Monday...Sunday
+    l() {
+      // Full day name; Monday...Sunday
       return txt_words[f.w()] + 'day';
     },
-    N: function() { // ISO-8601 day of week; 1[Mon]..7[Sun]
+    N() {
+      // ISO-8601 day of week; 1[Mon]..7[Sun]
       return f.w() || 7;
     },
-    S: function() { // Ordinal suffix for day of month; st, nd, rd, th
-      var j = f.j();
-      var i = j % 10;
-      if (i <= 3 && parseInt((j % 100) / 10, 10) == 1) {
+    S() {
+      // Ordinal suffix for day of month; st, nd, rd, th
+      const j = f.j();
+      let i = j % 10;
+      if (i <= 3 && parseInt((j % 100) / 10, 10) === 1) {
         i = 0;
       }
-      return ['st', 'nd', 'rd'][i - 1] || 'th';
+      return [ 'st', 'nd', 'rd' ][i - 1] || 'th';
     },
-    w: function() { // Day of week; 0[Sun]..6[Sat]
+    w() {
+      // Day of week; 0[Sun]..6[Sat]
       return jsdate.getDay();
     },
-    z: function() { // Day of year; 0..365
-      var a = new Date(f.Y(), f.n() - 1, f.j());
-      var b = new Date(f.Y(), 0, 1);
+    z() {
+      // Day of year; 0..365
+      const a = new Date(f.Y(), f.n() - 1, f.j());
+      const b = new Date(f.Y(), 0, 1);
       return Math.round((a - b) / 864e5);
     },
 
     // Week
-    W: function() { // ISO-8601 week number
-      var a = new Date(f.Y(), f.n() - 1, f.j() - f.N() + 3);
-      var b = new Date(a.getFullYear(), 0, 4);
+    W() {
+      // ISO-8601 week number
+      const a = new Date(f.Y(), f.n() - 1, f.j() - f.N() + 3);
+      const b = new Date(a.getFullYear(), 0, 4);
       return _pad(1 + Math.round((a - b) / 864e5 / 7), 2);
     },
 
     // Month
-    F: function() { // Full month name; January...December
+    F() {
+      // Full month name; January...December
       return txt_words[6 + f.n()];
     },
-    m: function() { // Month w/leading 0; 01...12
+    m() {
+      // Month w/leading 0; 01...12
       return _pad(f.n(), 2);
     },
-    M: function() { // Shorthand month name; Jan...Dec
+    M() {
+      // Shorthand month name; Jan...Dec
       return f.F()
         .slice(0, 3);
     },
-    n: function() { // Month; 1...12
+    n() {
+      // Month; 1...12
       return jsdate.getMonth() + 1;
     },
-    t: function() { // Days in month; 28...31
+    t() {
+      // Days in month; 28...31
       return (new Date(f.Y(), f.n(), 0))
         .getDate();
     },
 
     // Year
-    L: function() { // Is leap year?; 0 or 1
-      var j = f.Y();
+    L() {
+      // Is leap year?; 0 or 1
+      const j = f.Y();
       return j % 4 === 0 & j % 100 !== 0 | j % 400 === 0;
     },
-    o: function() { // ISO-8601 year
-      var n = f.n();
-      var W = f.W();
-      var Y = f.Y();
+    o() {
+      // ISO-8601 year
+      const n = f.n();
+      const W = f.W();
+      const Y = f.Y();
+      // eslint-disable-next-line
       return Y + (n === 12 && W < 9 ? 1 : n === 1 && W > 9 ? -1 : 0);
     },
-    Y: function() { // Full year; e.g. 1980...2010
+    Y() {
+      // Full year; e.g. 1980...2010
       return jsdate.getFullYear();
     },
-    y: function() { // Last two digits of year; 00...99
+    y() {
+      // Last two digits of year; 00...99
       return f.Y()
         .toString()
         .slice(-2);
     },
 
     // Time
-    a: function() { // am or pm
+    a() {
+      // am or pm
       return jsdate.getHours() > 11 ? 'pm' : 'am';
     },
-    A: function() { // AM or PM
+    A() {
+      // AM or PM
       return f.a()
         .toUpperCase();
     },
-    B: function() { // Swatch Internet time; 000..999
-      var H = jsdate.getUTCHours() * 36e2;
+    B() {
+      // Swatch Internet time; 000..999
+      const H = jsdate.getUTCHours() * 36e2;
       // Hours
-      var i = jsdate.getUTCMinutes() * 60;
+      const i = jsdate.getUTCMinutes() * 60;
       // Minutes
-      var s = jsdate.getUTCSeconds(); // Seconds
+      const s = jsdate.getUTCSeconds(); // Seconds
       return _pad(Math.floor((H + i + s + 36e2) / 86.4) % 1e3, 3);
     },
-    g: function() { // 12-Hours; 1..12
+    g() {
+      // 12-Hours; 1..12
       return f.G() % 12 || 12;
     },
-    G: function() { // 24-Hours; 0..23
+    G() {
+      // 24-Hours; 0..23
       return jsdate.getHours();
     },
-    h: function() { // 12-Hours w/leading 0; 01..12
+    h() {
+      // 12-Hours w/leading 0; 01..12
       return _pad(f.g(), 2);
     },
-    H: function() { // 24-Hours w/leading 0; 00..23
+    H() {
+      // 24-Hours w/leading 0; 00..23
       return _pad(f.G(), 2);
     },
-    i: function() { // Minutes w/leading 0; 00..59
+    i() {
+      // Minutes w/leading 0; 00..59
       return _pad(jsdate.getMinutes(), 2);
     },
-    s: function() { // Seconds w/leading 0; 00..59
+    s() {
+      // Seconds w/leading 0; 00..59
       return _pad(jsdate.getSeconds(), 2);
     },
-    u: function() { // Microseconds; 000000-999000
+    u() {
+      // Microseconds; 000000-999000
       return _pad(jsdate.getMilliseconds() * 1000, 6);
     },
 
     // Timezone
-    e: function() { // Timezone identifier; e.g. Atlantic/Azores, ...
+    e() {
+      // Timezone identifier; e.g. Atlantic/Azores, ...
       // The following works, but requires inclusion of the very large
       // timezone_abbreviations_list() function.
       /*              return that.date_default_timezone_get();
        */
-      throw 'Not supported (see source code of date() for timezone on how to add support)';
+      throw new Error('Not supported (see source code of date() for timezone on how to add support)');
     },
-    I: function() { // DST observed?; 0 or 1
+    I() {
+      // DST observed?; 0 or 1
       // Compares Jan 1 minus Jan 1 UTC to Jul 1 minus Jul 1 UTC.
       // If they are not equal, then DST is observed.
-      var a = new Date(f.Y(), 0);
+      const a = new Date(f.Y(), 0);
       // Jan 1
-      var c = Date.UTC(f.Y(), 0);
+      const c = Date.UTC(f.Y(), 0);
       // Jan 1 UTC
-      var b = new Date(f.Y(), 6);
+      const b = new Date(f.Y(), 6);
       // Jul 1
-      var d = Date.UTC(f.Y(), 6); // Jul 1 UTC
+      const d = Date.UTC(f.Y(), 6); // Jul 1 UTC
       return ((a - c) !== (b - d)) ? 1 : 0;
     },
-    O: function() { // Difference to GMT in hour format; e.g. +0200
-      var tzo = jsdate.getTimezoneOffset();
-      var a = Math.abs(tzo);
+    O() {
+      // Difference to GMT in hour format; e.g. +0200
+      const tzo = jsdate.getTimezoneOffset();
+      const a = Math.abs(tzo);
       return (tzo > 0 ? '-' : '+') + _pad(Math.floor(a / 60) * 100 + a % 60, 4);
     },
-    P: function() { // Difference to GMT w/colon; e.g. +02:00
-      var O = f.O();
+    P() {
+      // Difference to GMT w/colon; e.g. +02:00
+      const O = f.O();
       return (O.substr(0, 3) + ':' + O.substr(3, 2));
     },
-    T: function() { // Timezone abbreviation; e.g. EST, MDT, ...
+    T() {
+      // Timezone abbreviation; e.g. EST, MDT, ...
       // The following works, but requires inclusion of the very
       // large timezone_abbreviations_list() function.
       /*              var abbr, i, os, _default;
@@ -437,23 +491,27 @@ exports.date = function (format, timestamp) {
       */
       return 'UTC';
     },
-    Z: function() { // Timezone offset in seconds (-43200...50400)
+    Z() {
+      // Timezone offset in seconds (-43200...50400)
       return -jsdate.getTimezoneOffset() * 60;
     },
 
     // Full Date/Time
-    c: function() { // ISO-8601 date.
+    c() {
+      // ISO-8601 date.
       return 'Y-m-d\\TH:i:sP'.replace(formatChr, formatChrCb);
     },
-    r: function() { // RFC 2822
+    r() {
+      // RFC 2822
       return 'D, d M Y H:i:s O'.replace(formatChr, formatChrCb);
     },
-    U: function() { // Seconds since UNIX epoch
+    U() {
+      // Seconds since UNIX epoch
       return jsdate / 1000 | 0;
-    }
+    },
   };
-  this.date = function(format, timestamp) {
-    that = this;
+  this.date = function (format, timestamp) {
+    // eslint-disable-next-line
     jsdate = (timestamp === undefined ? new Date() : // Not provided
       (timestamp instanceof Date) ? new Date(timestamp) : // JS Date()
         new Date(timestamp * 1000) // UNIX timestamp (auto-convert to int)
@@ -522,9 +580,9 @@ exports.cloneObject = function (obj) {
  * @return {Object}
  */
 exports.merge = function () {
-  var ret = {};
-  for (var i = 0; i < arguments.length; i++) {
-    var obj = arguments[i];
+  const ret = {};
+  for (let i = 0; i < arguments.length; i++) {
+    const obj = arguments[i];
     Object.keys(obj).forEach(function (k) {
       ret[k] = obj[k];
     });
@@ -540,7 +598,7 @@ exports.merge = function () {
  * @return {String}
  */
 exports.jsonStringify = function (data, space) {
-  var seen = [];
+  const seen = [];
   return JSON.stringify(data, function (key, val) {
     if (!val || typeof val !== 'object') {
       return val;
@@ -576,22 +634,22 @@ exports.getArrayLastItem = function (arr) {
 /**
  * 异步函数节流
  *
- * @param {Function} fn
+ * @param {Function} fn 函数最后一个参数必须为回调函数，且回调函数第一个参数为 err
  * @param {Number} maxCcoun
  */
 exports.throttleAsync = function (fn, maxCount) {
   if (!(maxCount > 1)) maxCount = 1;
-  var counter = 0;
+  let counter = 0;
   return function () {
-    var args = utils.argumentsToArray(arguments);
-    var callback = utils.getArrayLastItem(args);
+    const args = utils.argumentsToArray(arguments);
+    const callback = utils.getArrayLastItem(args);
     if (counter >= maxCount) return callback(new Error('throttleAsync() out of limit'));
     args.pop();
     args.push(function () {
-      counter--;
+      counter -= 1;
       callback.apply(null, arguments);
     });
-    counter++;
+    counter += 1;
     fn.apply(null, args);
   };
 };
@@ -618,12 +676,13 @@ exports.inherits = function (fn, superConstructor) {
 /**
  * 扩展utils
  *
+ * @param {Object} obj
  * @return {Object}
  */
-exports.extend = function () {
-  return utils.merge(exports);
+exports.extend = function (obj) {
+  return utils.merge(exports, obj);
 };
-
+exports.extends = exports.extend;
 
 exports.array = {};
 
@@ -685,7 +744,7 @@ exports.array.copy = function (arr) {
  * @return {Object}
  */
 exports.array.concat = function () {
-  var ret = [];
+  const ret = [];
   return ret.concat.apply(ret, arguments);
 };
 
@@ -699,7 +758,7 @@ exports.array.concat = function () {
 exports.customError = function (name, info) {
   name = name || 'CustomError';
   info = info || {};
-  var code = '' +
+  const code = '' +
 'function ' + name + '(message, info2) {\n' +
 '  Error.captureStackTrace(this, ' + name + ');\n' +
 '  this.name = "' + name + '";\n' +
@@ -722,8 +781,6 @@ exports.isPromise = function (p) {
   return (p && p.then && typeof p.then === 'function' && p.catch && typeof p.catch === 'function');
 };
 
-exports.async = {};
-
 exports.promise = {};
 
 /**
@@ -733,7 +790,7 @@ exports.promise = {};
  * @return {Object}
  */
 exports.promise.call = function (fn) {
-  var args = utils.argumentsToArray(arguments).slice(1);
+  const args = utils.argumentsToArray(arguments).slice(1);
   return new Promise(function (resolve, reject) {
     args.push(function (err, ret) {
       if (err) {
@@ -742,8 +799,9 @@ exports.promise.call = function (fn) {
         resolve(ret);
       }
     });
+    let ret;
     try {
-      var ret = fn.apply(null, args);
+      ret = fn.apply(null, args);
     } catch (err) {
       return reject(err);
     }
@@ -759,24 +817,139 @@ exports.promise.call = function (fn) {
  * @return {Object}
  */
 exports.promise.all = function (_args) {
-  var args = Array.isArray(_args) ? _args : utils.argumentsToArray(arguments);
-  return new Promise(function (resolve, reject) {
-    var results = [];
-    var counter = 0;
-    function check () {
-      counter++;
+  const args = Array.isArray(_args) ? _args : utils.argumentsToArray(arguments);
+  return new Promise(function (resolve, _reject) {
+    const results = [];
+    let counter = 0;
+    function check() {
+      counter += 1;
       if (counter === args.length) {
         resolve(results);
       }
     }
     args.forEach(function (p, i) {
       p.then(function (ret) {
-        results[i] = [null, ret];
+        results[i] = [ null, ret ];
         check();
       }).catch(function (err) {
-        results[i] = [err];
+        results[i] = [ err ];
         check();
       });
     });
   });
+};
+
+/**
+ * 将IP地址转换为long值
+ *
+ * 例：   ipToInt('192.0.34.166')    ==> 3221234342
+ *       ipToInt('255.255.255.256') ==> false
+ *
+ * @param {String} ip
+ * @return {Number}
+ */
+exports.ipToInt = function (ip) {
+  const s = ip.split('.');
+  if (s.length !== 4) return false;
+  for (let i = 0; i < 4; i++) {
+    const v = s[i] = parseInt(s[i], 10);
+    if (v < 0 || v > 255) return false;
+  }
+  return s[0] * 16777216 + s[1] * 65536 + s[2] * 256 + s[3];
+};
+
+/**
+ * 将字符串转换为 Buffer
+ *
+ * @param {String} data
+ * @return {Buffer}
+ */
+exports.toBuffer = function (data) {
+  if (Buffer.isBuffer(data)) return data;
+  if (typeof data === 'string') return new Buffer(data);
+  throw new Error('invalid data type, must be string or buffer');
+};
+
+/**
+ * 使用指定方法加密数据
+ *
+ * @param {String} algorithm
+ * @param {String|Buffer} key
+ * @param {Buffer} data
+ * @return {Buffer}
+ */
+exports.encrypt = function (algorithm, key, data) {
+  key = Buffer.isBuffer(key) ? key : keyHash(key);
+  data = utils.toBuffer(data);
+  const cipher = crypto.createCipheriv(algorithm, key, new Buffer(0));
+  const encrypted = [ cipher.update(data), cipher.final() ];
+  return Buffer.concat(encrypted);
+};
+
+/**
+ * 使用指定方法加密数据流
+ *
+ * @param {String} algorithm
+ * @param {String|Buffer} key
+ * @param {Stream} inStream
+ * @return {Stream}
+ */
+exports.encryptStream = function (algorithm, key, inStream) {
+  key = Buffer.isBuffer(key) ? key : keyHash(key);
+  const cipher = crypto.createCipheriv(algorithm, key, new Buffer(0));
+  return inStream.pipe(cipher);
+};
+
+/**
+ * 使用指定方法解密数据
+ *
+ * @param {String} algorithm
+ * @param {String|Buffer} key
+ * @param {Buffer} data
+ * @return {Buffer}
+ */
+exports.decrypt = function (algorithm, key, data) {
+  key = Buffer.isBuffer(key) ? key : keyHash(key);
+  data = utils.toBuffer(data);
+  const cipher = crypto.createDecipheriv(algorithm, key, new Buffer(0));
+  const encrypted = [ cipher.update(data), cipher.final() ];
+  return Buffer.concat(encrypted);
+};
+
+/**
+ * 使用指定方法解密数据流
+ *
+ * @param {String} algorithm
+ * @param {String|Buffer} key
+ * @param {Stream} inStream
+ * @return {Stream}
+ */
+exports.decryptStream = function (algorithm, key, inStream) {
+  key = Buffer.isBuffer(key) ? key : keyHash(key);
+  const cipher = crypto.createDecipheriv(algorithm, key, new Buffer(0));
+  return inStream.pipe(cipher);
+};
+
+function keyHash(data) {
+  data = utils.toBuffer(data);
+  return crypto.createHash('sha256').update(data).digest();
+}
+
+/**
+ * 创建 hash 的转换流
+ *
+ * @param {String} method 方法，如 md5, sha1, sha256
+ * @return {Stream}
+ */
+exports.hashTransform = function (method, callback) {
+  const cipher = crypto.createHash(method);
+  const transform = new stream.Transform({
+    transform(chunk, encoding, callback) {
+      cipher.update(chunk, encoding);
+      this.push(chunk);
+      callback();
+    },
+  });
+  transform.once('finish', () => callback(null, cipher.digest()));
+  return transform;
 };

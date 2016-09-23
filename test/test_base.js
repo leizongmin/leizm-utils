@@ -35,11 +35,11 @@ describe('base', function () {
   it('encryptData & decryptData', function () {
     const k = 'mykey';
     const d1 = utils.encryptData('hello,world', k);
-    const d2 = utils.encryptData({msg: 'hello,老雷'}, k);
+    const d2 = utils.encryptData({ msg: 'hello,老雷' }, k);
     assert.equal(typeof d1, 'string');
     assert.equal(typeof d2, 'string');
     assert.deepEqual(utils.decryptData(d1, k), 'hello,world');
-    assert.deepEqual(utils.decryptData(d2, k), {msg: 'hello,老雷'});
+    assert.deepEqual(utils.decryptData(d2, k), { msg: 'hello,老雷' });
     assert.throws(() => {
       utils.decryptData(d1, 'aaaa');
     });
@@ -61,6 +61,20 @@ describe('base', function () {
       assert.equal(s.length, i);
       assert.equal(/[a-zA-Z]/.test(s), true);
     }
+  });
+
+  it('hash', function () {
+    assert.equal(utils.hash('md5', '123333'), 'ce9e8dc8a961356d7624f1f463edafb5');
+    assert.equal(utils.hash('md5', '11111'), 'b0baee9d279d34fa1dfd71aadb908c3f');
+  });
+
+  it('encrypt', function () {
+    const key = '12345678901234567890123456789012';
+    const txt = '在想要查看执行时间的代码的地方进行这么处理';
+    const encrypted = '8xz9pXs0AtF/pWrPgtiGFSegxR6lqD81hPMy7pxQJnrzqJR6jCP13zhwIKxN06B8ClI5putvnQ8cZ+KlYi0VGw==';
+    assert.equal(utils.encrypt('aes-256-ecb', key, txt).toString('base64'), encrypted);
+    assert.equal(utils.decrypt('aes-256-ecb', key, utils.encrypt('aes-256-ecb', key, txt)).toString(), txt);
+    assert.equal(utils.decrypt('aes-256-ecb', key, new Buffer(encrypted, 'base64')), txt);
   });
 
 });

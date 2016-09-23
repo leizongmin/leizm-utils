@@ -1,4 +1,7 @@
-function data() {/*
+'use strict';
+
+// eslint-disable-next-line
+function data() { /*
 
                                  _oo8oo_
                                 o8888888o
@@ -24,6 +27,6 @@ function data() {/*
 
                          佛祖保佑         永无bug
 
-*/}
+*/ }
 
 module.exports = data.toString().split('\n').slice(1, -1).join('\n');

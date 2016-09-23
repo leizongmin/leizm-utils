@@ -10,10 +10,12 @@ $ npm install lei-utils --save
 一些常用的工具函数
 
 + `bugfree (doNotOutput)`
++ `format (f)`
 + `sha1 (text)`
 + `md5 (text)`
 + `fileSha1 (filename, callback)`
 + `fileMd5 (filename, callback)`
++ `hash (method, text)`
 + `encryptPassword (password)`
 + `validatePassword (password, encrypted)`
 + `encryptData (data, secret)`
@@ -34,7 +36,8 @@ $ npm install lei-utils --save
 + `throttleAsync (fn, maxCount)`
 + `inheritsEventEmitter (fn)`
 + `inherits (fn, superConstructor)`
-+ `extend ()`
++ `extend (obj)`
++ `extends (obj)`
 + `array`
   + `last (arr)`
   + `head (arr)`
@@ -44,10 +47,16 @@ $ npm install lei-utils --save
   + `concat ()`
 + `customError (name, info)`
 + `isPromise (p)`
-+ `async`
 + `promise`
   + `call (fn)`
   + `all (_args)`
++ `ipToInt (ip)`
++ `toBuffer (data)`
++ `encrypt (algorithm, key, data)`
++ `encryptStream (algorithm, key, inStream)`
++ `decrypt (algorithm, key, data)`
++ `decryptStream (algorithm, key, inStream)`
++ `hashTransform (method, callback)`
 
 
 

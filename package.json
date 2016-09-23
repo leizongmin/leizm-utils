@@ -1,11 +1,17 @@
 {
   "name": "lei-utils",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "utils",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "bugfree.js"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "node build_docs"
+    "test": "mocha -t 5000",
+    "lint": "eslint *.js test/*.js --fix",
+    "docs": "node build_docs",
+    "prepublish": "npm run docs && npm run lint && npm test"
   },
   "repository": {
     "type": "git",

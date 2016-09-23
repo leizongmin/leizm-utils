@@ -110,7 +110,7 @@ describe('promise', function () {
         sleep(0, 'DD'),
       ])
       .then(ret => {
-        assert.deepEqual(ret, [[null, 'AA'], [null, 'BB'], [null, 'CC'], [null, 'DD']]);
+        assert.deepEqual(ret, [[ null, 'AA' ], [ null, 'BB' ], [ null, 'CC' ], [ null, 'DD' ]]);
         done();
       })
       .catch(done);
@@ -134,7 +134,7 @@ describe('promise', function () {
         sleep(0, 'DD')
       )
       .then(ret => {
-        assert.deepEqual(ret, [[null, 'AA'], [null, 'BB'], [null, 'CC'], [null, 'DD']]);
+        assert.deepEqual(ret, [[ null, 'AA' ], [ null, 'BB' ], [ null, 'CC' ], [ null, 'DD' ]]);
         done();
       })
       .catch(done);
@@ -163,7 +163,7 @@ describe('promise', function () {
           assert.equal(item[0] instanceof Error, true);
           msgs.push(item[0].message);
         }
-        assert.deepEqual(msgs, ['AA', 'BB', 'CC', 'DD']);
+        assert.deepEqual(msgs, [ 'AA', 'BB', 'CC', 'DD' ]);
         done();
       })
       .catch(done);
