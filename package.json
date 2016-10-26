@@ -1,6 +1,6 @@
 {
   "name": "lei-utils",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "utils",
   "main": "index.js",
   "files": [
