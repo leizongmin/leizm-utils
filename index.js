@@ -953,3 +953,23 @@ exports.hashTransform = function (method, callback) {
   transform.once('finish', () => callback(null, cipher.digest()));
   return transform;
 };
+
+/**
+ * 创建一个带 promise 的回调函数
+ *
+ * @return {Function}
+ */
+exports.createPromiseCallback = function createPromiseCallback() {
+  const callback = (err, ret) => {
+    if (err) {
+      callback.reject(err);
+    } else {
+      callback.resolve(ret);
+    }
+  };
+  callback.promise = new Promise((resolve, reject) => {
+    callback.resolve = resolve;
+    callback.reject = reject;
+  });
+  return callback;
+};
