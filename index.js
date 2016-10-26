@@ -21,6 +21,7 @@ const BUG_FREE = require('./bugfree');
  * 图像来源于 https://github.com/ottomao/bugfreejs
  *
  * @param {Boolean} doNotOutput 设置为true时不自动打印，仅返回字符串
+ * @return {String}
  */
 exports.bugfree = function bugfree(doNotOutput) {
   if (doNotOutput) {
@@ -63,7 +64,7 @@ exports.md5 = function md5(text) {
  * 取文件内容的SHA1
  *
  * @param {String} filename
- * @return {Function} callback
+ * @param {Function} callback
  */
 exports.fileSha1 = function fileSha1(filename, callback) {
   fs.readFile(filename, function (err, data) {
@@ -76,7 +77,7 @@ exports.fileSha1 = function fileSha1(filename, callback) {
  * 取文件内容的MD5
  *
  * @param {String} filename
- * @return {Function} callback
+ * @param {Function} callback
  */
 exports.fileMd5 = function fileMd5(filename, callback) {
   fs.readFile(filename, function (err, data) {
@@ -115,7 +116,7 @@ exports.encryptPassword = function encryptPassword(password) {
  *
  * @param {String} password 待验证的密码
  * @param {String} encrypted 密码加密字符串
- * @return {bool}
+ * @return {Boolean}
  */
 exports.validatePassword = function validatePassword(password, encrypted) {
   const random = encrypted.toUpperCase().split(':');
@@ -636,6 +637,7 @@ exports.getArrayLastItem = function getArrayLastItem(arr) {
  *
  * @param {Function} fn 函数最后一个参数必须为回调函数，且回调函数第一个参数为 err
  * @param {Number} maxCcoun
+ * @return {Function}
  */
 exports.throttleAsync = function throttleAsync(fn, maxCount) {
   if (!(maxCount > 1)) maxCount = 1;
@@ -658,6 +660,7 @@ exports.throttleAsync = function throttleAsync(fn, maxCount) {
  * 继承EventEmitter
  *
  * @param {Function} fn
+ * @param {Object}
  */
 exports.inheritsEventEmitter = function inheritsEventEmitter(fn) {
   return util.inherits(fn, events.EventEmitter);
@@ -668,6 +671,7 @@ exports.inheritsEventEmitter = function inheritsEventEmitter(fn) {
  *
  * @param {Function} fn
  * @param {Function} superConstructor
+ * @return {Object}
  */
 exports.inherits = function inherits(fn, superConstructor) {
   return util.inherits(fn, superConstructor);
@@ -814,6 +818,7 @@ exports.promise.call = function call(fn) {
 /**
  * 等待所有Promise执行完毕
  *
+ * @param {Array} _args
  * @return {Object}
  */
 exports.promise.all = function all(_args) {
