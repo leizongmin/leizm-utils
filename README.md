@@ -57,6 +57,7 @@ $ npm install lei-utils --save
 + `decrypt (algorithm, key, data)`
 + `decryptStream (algorithm, key, inStream)`
 + `hashTransform (method, callback)`
++ `createPromiseCallback ()`
 
 
 

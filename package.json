@@ -10,7 +10,7 @@
   "scripts": {
     "test": "mocha -t 5000",
     "lint": "eslint *.js test/*.js --fix",
-    "docs": "node build_docs",
+    "docs": "node build_docs && jsdoc -d docs index.js",
     "prepublish": "npm run docs && npm run lint && npm test"
   },
   "repository": {
@@ -28,6 +28,7 @@
     "node": ">= 4.0.0"
   },
   "devDependencies": {
+    "jsdoc": "^3.4.2",
     "mocha": "^3.0.1"
   }
 }

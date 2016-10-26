@@ -12,7 +12,7 @@ const utils = require('./');
 
 
 function getFunctionArguments(fn) {
-  return fn.toString().split('\n')[0].match(/function\s*\((.*)\)\s*\{/)[1].split(',').map(function (a) { return a.trim(); });
+  return fn.toString().split('\n')[0].match(/function.*\((.*)\)\s*\{/)[1].split(',').map(function (a) { return a.trim(); });
 }
 
 const list = [];
