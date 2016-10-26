@@ -22,7 +22,7 @@ const BUG_FREE = require('./bugfree');
  *
  * @param {Boolean} doNotOutput 设置为true时不自动打印，仅返回字符串
  */
-exports.bugfree = function (doNotOutput) {
+exports.bugfree = function bugfree(doNotOutput) {
   if (doNotOutput) {
     return BUG_FREE;
   }
@@ -45,7 +45,7 @@ exports.format = util.format;
  * @param {String} text 文本
  * @return {String}
  */
-exports.sha1 = function (text) {
+exports.sha1 = function sha1(text) {
   return crypto.createHash('sha1').update(utils.toBuffer(text)).digest('hex');
 };
 
@@ -55,7 +55,7 @@ exports.sha1 = function (text) {
  * @param {String} text 文本
  * @return {String}
  */
-exports.md5 = function (text) {
+exports.md5 = function md5(text) {
   return crypto.createHash('md5').update(utils.toBuffer(text)).digest('hex');
 };
 
@@ -65,7 +65,7 @@ exports.md5 = function (text) {
  * @param {String} filename
  * @return {Function} callback
  */
-exports.fileSha1 = function (filename, callback) {
+exports.fileSha1 = function fileSha1(filename, callback) {
   fs.readFile(filename, function (err, data) {
     if (err) return callback(err);
     callback(null, utils.sha1(data));
@@ -78,7 +78,7 @@ exports.fileSha1 = function (filename, callback) {
  * @param {String} filename
  * @return {Function} callback
  */
-exports.fileMd5 = function (filename, callback) {
+exports.fileMd5 = function fileMd5(filename, callback) {
   fs.readFile(filename, function (err, data) {
     if (err) return callback(err);
     callback(null, utils.md5(data));
@@ -92,7 +92,7 @@ exports.fileMd5 = function (filename, callback) {
  * @param {String|Buffer} text 数据
  * @return {String}
  */
-exports.hash = function (method, text) {
+exports.hash = function hash(method, text) {
   return crypto.createHash(method).update(utils.toBuffer(text)).digest('hex');
 };
 
@@ -102,7 +102,7 @@ exports.hash = function (method, text) {
  * @param {String} password
  * @return {String}
  */
-exports.encryptPassword = function (password) {
+exports.encryptPassword = function encryptPassword(password) {
   const random = utils.md5(Math.random() + '' + Math.random()).toUpperCase();
   const left = random.substr(0, 2);
   const right = random.substr(-2);
@@ -117,7 +117,7 @@ exports.encryptPassword = function (password) {
  * @param {String} encrypted 密码加密字符串
  * @return {bool}
  */
-exports.validatePassword = function (password, encrypted) {
+exports.validatePassword = function validatePassword(password, encrypted) {
   const random = encrypted.toUpperCase().split(':');
   if (random.length < 3) return false;
   const left = random[0];
@@ -134,7 +134,7 @@ exports.validatePassword = function (password, encrypted) {
  * @param {String} secret
  * @return {String}
  */
-exports.encryptData = function (data, secret) {
+exports.encryptData = function encryptData(data, secret) {
   const str = JSON.stringify(data);
   const cipher = crypto.createCipher('aes192', secret);
   let enc = cipher.update(str, 'utf8', 'hex');
@@ -149,7 +149,7 @@ exports.encryptData = function (data, secret) {
  * @param {String} secret
  * @return {Mixed}
  */
-exports.decryptData = function (str, secret) {
+exports.decryptData = function decryptData(str, secret) {
   const decipher = crypto.createDecipher('aes192', secret);
   let dec = decipher.update(str, 'hex', 'utf8');
   dec += decipher.final('utf8');
@@ -164,7 +164,7 @@ exports.decryptData = function (str, secret) {
  * @param {String} chars
  * @return {String}
  */
-exports.randomString = function (size, chars) {
+exports.randomString = function randomString(size, chars) {
   size = size || 6;
   chars = chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const max = chars.length;
@@ -181,7 +181,7 @@ exports.randomString = function (size, chars) {
  * @param {Integer} size
  * @return {String}
  */
-exports.randomNumber = function (size) {
+exports.randomNumber = function randomNumber(size) {
   return utils.randomString(size, '0123456789');
 };
 
@@ -191,7 +191,7 @@ exports.randomNumber = function (size) {
  * @param {Integer} size
  * @return {String}
  */
-exports.randomLetter = function (size) {
+exports.randomLetter = function randomLetter(size) {
   return utils.randomString(size, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
 };
 
@@ -202,7 +202,7 @@ exports.randomLetter = function (size) {
  * @param {String|Number|Date} timestamp
  * @return {String}
  */
-exports.date = function (format, timestamp) {
+exports.date = function date(format, timestamp) {
   //  discuss at: http://phpjs.org/functions/date/
   // original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)
   // original by: gettimeofday
@@ -526,7 +526,7 @@ exports.date = function (format, timestamp) {
  *
  * @param {Error} err
  */
-exports.noop = function (err) {
+exports.noop = function noop(err) {
   if (err) {
     console.error('noop callback: %s', err);
   }
@@ -538,7 +538,7 @@ exports.noop = function (err) {
  * @param {Mixed} str
  * @return {Boolean}
  */
-exports.isString = function (str) {
+exports.isString = function isString(str) {
   return (typeof str === 'string');
 };
 
@@ -548,7 +548,7 @@ exports.isString = function (str) {
  * @param {Mixed} str
  * @return {Boolean}
  */
-exports.isInteger = function (str) {
+exports.isInteger = function isInteger(str) {
   return (Math.round(str) === Number(str));
 };
 
@@ -558,7 +558,7 @@ exports.isInteger = function (str) {
  * @param {Mixed} str
  * @return {Boolean}
  */
-exports.isNumber = function (str) {
+exports.isNumber = function isNumber(str) {
   return (!isNaN(str));
 };
 
@@ -568,7 +568,7 @@ exports.isNumber = function (str) {
  * @param {Object} obj
  * @return {Object}
  */
-exports.cloneObject = function (obj) {
+exports.cloneObject = function cloneObject(obj) {
   return JSON.parse(JSON.stringify(obj));
 };
 
@@ -579,7 +579,7 @@ exports.cloneObject = function (obj) {
  * @param {Object} b
  * @return {Object}
  */
-exports.merge = function () {
+exports.merge = function merge() {
   const ret = {};
   for (let i = 0; i < arguments.length; i++) {
     const obj = arguments[i];
@@ -597,7 +597,7 @@ exports.merge = function () {
  * @param {String|Number} space 缩进
  * @return {String}
  */
-exports.jsonStringify = function (data, space) {
+exports.jsonStringify = function jsonStringify(data, space) {
   const seen = [];
   return JSON.stringify(data, function (key, val) {
     if (!val || typeof val !== 'object') {
@@ -617,7 +617,7 @@ exports.jsonStringify = function (data, space) {
  * @param {Object} args
  * @return {Array}
  */
-exports.argumentsToArray = function (args) {
+exports.argumentsToArray = function argumentsToArray(args) {
   return Array.prototype.slice.call(args);
 };
 
@@ -627,7 +627,7 @@ exports.argumentsToArray = function (args) {
  * @param {Array} arr
  * @return {Object}
  */
-exports.getArrayLastItem = function (arr) {
+exports.getArrayLastItem = function getArrayLastItem(arr) {
   return arr[arr.length - 1];
 };
 
@@ -637,7 +637,7 @@ exports.getArrayLastItem = function (arr) {
  * @param {Function} fn 函数最后一个参数必须为回调函数，且回调函数第一个参数为 err
  * @param {Number} maxCcoun
  */
-exports.throttleAsync = function (fn, maxCount) {
+exports.throttleAsync = function throttleAsync(fn, maxCount) {
   if (!(maxCount > 1)) maxCount = 1;
   let counter = 0;
   return function () {
@@ -659,7 +659,7 @@ exports.throttleAsync = function (fn, maxCount) {
  *
  * @param {Function} fn
  */
-exports.inheritsEventEmitter = function (fn) {
+exports.inheritsEventEmitter = function inheritsEventEmitter(fn) {
   return util.inherits(fn, events.EventEmitter);
 };
 
@@ -669,7 +669,7 @@ exports.inheritsEventEmitter = function (fn) {
  * @param {Function} fn
  * @param {Function} superConstructor
  */
-exports.inherits = function (fn, superConstructor) {
+exports.inherits = function inherits(fn, superConstructor) {
   return util.inherits(fn, superConstructor);
 };
 
@@ -679,7 +679,7 @@ exports.inherits = function (fn, superConstructor) {
  * @param {Object} obj
  * @return {Object}
  */
-exports.extend = function (obj) {
+exports.extend = function extend(obj) {
   return utils.merge(exports, obj);
 };
 exports.extends = exports.extend;
@@ -692,7 +692,7 @@ exports.array = {};
  * @param {Array} arr
  * @return {Object}
  */
-exports.array.last = function (arr) {
+exports.array.last = function last(arr) {
   return arr[arr.length - 1];
 };
 
@@ -702,7 +702,7 @@ exports.array.last = function (arr) {
  * @param {Array} arr
  * @return {Object}
  */
-exports.array.head = function (arr) {
+exports.array.head = function head(arr) {
   return arr[0];
 };
 
@@ -712,7 +712,7 @@ exports.array.head = function (arr) {
  * @param {Array} arr
  * @return {Object}
  */
-exports.array.first = function (arr) {
+exports.array.first = function first(arr) {
   return arr[0];
 };
 
@@ -722,7 +722,7 @@ exports.array.first = function (arr) {
  * @param {Array} arr
  * @return {Object}
  */
-exports.array.rest = function (arr) {
+exports.array.rest = function rest(arr) {
   return arr.slice(1);
 };
 
@@ -732,7 +732,7 @@ exports.array.rest = function (arr) {
  * @param {Array} arr
  * @return {Object}
  */
-exports.array.copy = function (arr) {
+exports.array.copy = function copy(arr) {
   return arr.slice();
 };
 
@@ -743,7 +743,7 @@ exports.array.copy = function (arr) {
  * @param {Array} b
  * @return {Object}
  */
-exports.array.concat = function () {
+exports.array.concat = function concat() {
   const ret = [];
   return ret.concat.apply(ret, arguments);
 };
@@ -755,7 +755,7 @@ exports.array.concat = function () {
  * @param {Object} info
  * @return {Function}
  */
-exports.customError = function (name, info) {
+exports.customError = function customError(name, info) {
   name = name || 'CustomError';
   info = info || {};
   const code = '' +
@@ -777,8 +777,8 @@ name + '.prototype = Error.prototype;' + name;
  * @param {Object} p
  * @return {Boolean}
  */
-exports.isPromise = function (p) {
-  return (p && p.then && typeof p.then === 'function' && p.catch && typeof p.catch === 'function');
+exports.isPromise = function isPromise(p) {
+  return (p && typeof p.then === 'function' && typeof p.catch === 'function');
 };
 
 exports.promise = {};
@@ -789,7 +789,7 @@ exports.promise = {};
  * @param {Function} fn
  * @return {Object}
  */
-exports.promise.call = function (fn) {
+exports.promise.call = function call(fn) {
   const args = utils.argumentsToArray(arguments).slice(1);
   return new Promise(function (resolve, reject) {
     args.push(function (err, ret) {
@@ -816,9 +816,9 @@ exports.promise.call = function (fn) {
  *
  * @return {Object}
  */
-exports.promise.all = function (_args) {
+exports.promise.all = function all(_args) {
   const args = Array.isArray(_args) ? _args : utils.argumentsToArray(arguments);
-  return new Promise(function (resolve, _reject) {
+  return new Promise(function (resolve, reject) {
     const results = [];
     let counter = 0;
     function check() {
@@ -848,7 +848,7 @@ exports.promise.all = function (_args) {
  * @param {String} ip
  * @return {Number}
  */
-exports.ipToInt = function (ip) {
+exports.ipToInt = function ipToInt(ip) {
   const s = ip.split('.');
   if (s.length !== 4) return false;
   for (let i = 0; i < 4; i++) {
@@ -864,7 +864,7 @@ exports.ipToInt = function (ip) {
  * @param {String} data
  * @return {Buffer}
  */
-exports.toBuffer = function (data) {
+exports.toBuffer = function toBuffer(data) {
   if (Buffer.isBuffer(data)) return data;
   if (typeof data === 'string') return new Buffer(data);
   throw new Error('invalid data type, must be string or buffer');
@@ -878,7 +878,7 @@ exports.toBuffer = function (data) {
  * @param {Buffer} data
  * @return {Buffer}
  */
-exports.encrypt = function (algorithm, key, data) {
+exports.encrypt = function encrypt(algorithm, key, data) {
   key = Buffer.isBuffer(key) ? key : keyHash(key);
   data = utils.toBuffer(data);
   const cipher = crypto.createCipheriv(algorithm, key, new Buffer(0));
@@ -894,7 +894,7 @@ exports.encrypt = function (algorithm, key, data) {
  * @param {Stream} inStream
  * @return {Stream}
  */
-exports.encryptStream = function (algorithm, key, inStream) {
+exports.encryptStream = function encryptStream(algorithm, key, inStream) {
   key = Buffer.isBuffer(key) ? key : keyHash(key);
   const cipher = crypto.createCipheriv(algorithm, key, new Buffer(0));
   return inStream.pipe(cipher);
@@ -908,7 +908,7 @@ exports.encryptStream = function (algorithm, key, inStream) {
  * @param {Buffer} data
  * @return {Buffer}
  */
-exports.decrypt = function (algorithm, key, data) {
+exports.decrypt = function decrypt(algorithm, key, data) {
   key = Buffer.isBuffer(key) ? key : keyHash(key);
   data = utils.toBuffer(data);
   const cipher = crypto.createDecipheriv(algorithm, key, new Buffer(0));
@@ -924,7 +924,7 @@ exports.decrypt = function (algorithm, key, data) {
  * @param {Stream} inStream
  * @return {Stream}
  */
-exports.decryptStream = function (algorithm, key, inStream) {
+exports.decryptStream = function decryptStream(algorithm, key, inStream) {
   key = Buffer.isBuffer(key) ? key : keyHash(key);
   const cipher = crypto.createDecipheriv(algorithm, key, new Buffer(0));
   return inStream.pipe(cipher);
@@ -941,7 +941,7 @@ function keyHash(data) {
  * @param {String} method 方法，如 md5, sha1, sha256
  * @return {Stream}
  */
-exports.hashTransform = function (method, callback) {
+exports.hashTransform = function hashTransform(method, callback) {
   const cipher = crypto.createHash(method);
   const transform = new stream.Transform({
     transform(chunk, encoding, callback) {
