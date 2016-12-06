@@ -1,5 +1,7 @@
 # node-lei-utils
 
+支持 TypeScript
+
 安装
 
 ```bash

@@ -17,7 +17,7 @@ const utils = exports;
 const BUG_FREE = require('./bugfree');
 
 /**
- * 佛祖保佑，用无Bug
+ * 佛祖保佑，永无Bug
  * 图像来源于 https://github.com/ottomao/bugfreejs
  *
  * @param {Boolean} doNotOutput 设置为true时不自动打印，仅返回字符串
