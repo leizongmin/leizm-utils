@@ -11,7 +11,8 @@ const MyError = utils.customError("MyError");
 new MyError().stack;
 
 const MyError2 = utils.customError("MyError", { code: "TEST" });
-new MyError2().stack;
+const err = new MyError2('hello', { ok: false });
+
 
 utils.createPromiseCallback<string>().promise.then(ret => ret.slice());
 

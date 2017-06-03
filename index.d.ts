@@ -20,10 +20,10 @@ export interface PromiseCallback<T> {
 }
 
 /**
- * Key-Value 键值对对象
+ * 自定义 Error
  */
-export interface KVObject {
-  [key: string]: any;
+export interface CustomErrorConstructor extends Error {
+  new(message?: string, info?: Record<string, any>): Error;
 }
 
 /**
@@ -139,7 +139,7 @@ export function cloneObject(obj: any): any;
 /**
  * 合并对象
  */
-export function merge(...list: any[]): KVObject;
+export function merge(...list: any[]): Record<string, any>;
 
 /**
  * 返回安全的JSON字符串
@@ -174,7 +174,7 @@ export function inherits(fn: FunctionConstructor, superConstructor: FunctionCons
 /**
  * 扩展utils
  */
-export function extend(obj: KVObject): KVObject;
+export function extend(obj: Record<string, any>): Record<string, any>;
 
 export const array: {
   /**
@@ -206,7 +206,7 @@ export const array: {
 /**
  * 生成自定义Error类型
  */
-export function customError(name: string, info?: KVObject): ErrorConstructor;
+export function customError(name: string, info?: Record<string, any>): CustomErrorConstructor;
 
 /**
  * 判断是否为Promise对象
