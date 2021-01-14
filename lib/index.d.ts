@@ -1,5 +1,5 @@
 /**
- * lei-utils
+ * @leizm/utils
  *
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
@@ -23,7 +23,7 @@ export interface PromiseCallback<T> {
  * 自定义 Error
  */
 export interface CustomErrorConstructor extends Error {
-  new(message?: string, info?: Record<string, any>): Error;
+  new (message?: string, info?: Record<string, any>): Error;
 }
 
 /**
@@ -223,7 +223,7 @@ export const promise: {
    * 等待所有Promise执行完毕
    */
   all<T>(args: PromiseLike<T>[]): Promise<T[]>;
-}
+};
 
 /**
  * 将IP地址转换为long值
@@ -243,7 +243,11 @@ export function encrypt(algorithm: string, key: string | Buffer, data: Buffer): 
 /**
  * 使用指定方法加密数据流
  */
-export function encryptStream(algorithm: string, key: string | Buffer, inStream: NodeJS.ReadableStream): NodeJS.ReadableStream;
+export function encryptStream(
+  algorithm: string,
+  key: string | Buffer,
+  inStream: NodeJS.ReadableStream,
+): NodeJS.ReadableStream;
 
 /**
  * 使用指定方法解密数据
@@ -253,7 +257,11 @@ export function decrypt(algorithm: string, key: string | Buffer, data: Buffer): 
 /**
  * 使用指定方法解密数据流
  */
-export function decryptStream(algorithm: string, key: string | Buffer, inStream: NodeJS.ReadableStream): NodeJS.ReadableStream;
+export function decryptStream(
+  algorithm: string,
+  key: string | Buffer,
+  inStream: NodeJS.ReadableStream,
+): NodeJS.ReadableStream;
 
 /**
  * 创建 hash 的转换流

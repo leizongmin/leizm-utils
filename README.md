@@ -1,18 +1,18 @@
-# node-lei-utils
+# node-@leizm/utils
 
 支持 TypeScript
 
 安装
 
 ```bash
-$ npm install lei-utils --save
+$ npm install @leizm/utils --save
 ```
 
 
 一些常用的工具函数
 
 + `bugfree (doNotOutput)`
-+ `format (f)`
++ `format (...args)`
 + `sha1 (text)`
 + `md5 (text)`
 + `fileSha1 (filename, callback)`
@@ -68,7 +68,7 @@ $ npm install lei-utils --save
 ```
 The MIT License (MIT)
 
-Copyright (c) 2014-2015 老雷
+Copyright (c) 2014-2021 老雷
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

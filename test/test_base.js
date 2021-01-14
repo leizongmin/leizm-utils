@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * lei-utils tests
+ * @leizm/utils tests
  *
  * @author Zongmin Lei <leizongmin@gmail.com>
  */

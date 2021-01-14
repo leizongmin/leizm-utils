@@ -26,23 +26,22 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>'use strict';
+            <pre class="prettyprint source linenums"><code>"use strict";
 
 /**
- * lei-utils
+ * @leizm/utils
  *
  * @author Zongmin Lei &lt;leizongmin@gmail.com>
  */
 
-const fs = require('fs');
-const util = require('util');
-const events = require('events');
-const crypto = require('crypto');
-const stream = require('stream');
+const fs = require("fs");
+const util = require("util");
+const events = require("events");
+const crypto = require("crypto");
+const stream = require("stream");
 const utils = exports;
 
-
-const BUG_FREE = require('./bugfree');
+const BUG_FREE = require("./bugfree");
 
 /**
  * 佛祖保佑，永无Bug
@@ -75,7 +74,7 @@ exports.format = util.format;
  * @return {String}
  */
 exports.sha1 = function sha1(text) {
-  return crypto.createHash('sha1').update(utils.toBuffer(text)).digest('hex');
+  return crypto.createHash("sha1").update(utils.toBuffer(text)).digest("hex");
 };
 
 /**
@@ -85,7 +84,7 @@ exports.sha1 = function sha1(text) {
  * @return {String}
  */
 exports.md5 = function md5(text) {
-  return crypto.createHash('md5').update(utils.toBuffer(text)).digest('hex');
+  return crypto.createHash("md5").update(utils.toBuffer(text)).digest("hex");
 };
 
 /**
@@ -122,7 +121,7 @@ exports.fileMd5 = function fileMd5(filename, callback) {
  * @return {String}
  */
 exports.hash = function hash(method, text) {
-  return crypto.createHash(method).update(utils.toBuffer(text)).digest('hex');
+  return crypto.createHash(method).update(utils.toBuffer(text)).digest("hex");
 };
 
 /**
@@ -132,11 +131,11 @@ exports.hash = function hash(method, text) {
  * @return {String}
  */
 exports.encryptPassword = function encryptPassword(password) {
-  const random = utils.md5(Math.random() + '' + Math.random()).toUpperCase();
+  const random = utils.md5(Math.random() + "" + Math.random()).toUpperCase();
   const left = random.substr(0, 2);
   const right = random.substr(-2);
   const newpassword = utils.md5(left + password + right).toUpperCase();
-  return [ left, newpassword, right ].join(':');
+  return [left, newpassword, right].join(":");
 };
 
 /**
@@ -147,7 +146,7 @@ exports.encryptPassword = function encryptPassword(password) {
  * @return {Boolean}
  */
 exports.validatePassword = function validatePassword(password, encrypted) {
-  const random = encrypted.toUpperCase().split(':');
+  const random = encrypted.toUpperCase().split(":");
   if (random.length &lt; 3) return false;
   const left = random[0];
   const right = random[2];
@@ -165,9 +164,9 @@ exports.validatePassword = function validatePassword(password, encrypted) {
  */
 exports.encryptData = function encryptData(data, secret) {
   const str = JSON.stringify(data);
-  const cipher = crypto.createCipher('aes192', secret);
-  let enc = cipher.update(str, 'utf8', 'hex');
-  enc += cipher.final('hex');
+  const cipher = crypto.createCipher("aes192", secret);
+  let enc = cipher.update(str, "utf8", "hex");
+  enc += cipher.final("hex");
   return enc;
 };
 
@@ -179,9 +178,9 @@ exports.encryptData = function encryptData(data, secret) {
  * @return {Mixed}
  */
 exports.decryptData = function decryptData(str, secret) {
-  const decipher = crypto.createDecipher('aes192', secret);
-  let dec = decipher.update(str, 'hex', 'utf8');
-  dec += decipher.final('utf8');
+  const decipher = crypto.createDecipher("aes192", secret);
+  let dec = decipher.update(str, "hex", "utf8");
+  dec += decipher.final("utf8");
   const data = JSON.parse(dec);
   return data;
 };
@@ -195,9 +194,9 @@ exports.decryptData = function decryptData(str, secret) {
  */
 exports.randomString = function randomString(size, chars) {
   size = size || 6;
-  chars = chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  chars = chars || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const max = chars.length;
-  let ret = '';
+  let ret = "";
   for (let i = 0; i &lt; size; i++) {
     ret += chars.charAt(Math.floor(Math.random() * max));
   }
@@ -211,7 +210,7 @@ exports.randomString = function randomString(size, chars) {
  * @return {String}
  */
 exports.randomNumber = function randomNumber(size) {
-  return utils.randomString(size, '0123456789');
+  return utils.randomString(size, "0123456789");
 };
 
 /**
@@ -221,7 +220,7 @@ exports.randomNumber = function randomNumber(size) {
  * @return {String}
  */
 exports.randomLetter = function randomLetter(size) {
-  return utils.randomString(size, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
+  return utils.randomString(size, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 };
 
 /**
@@ -292,9 +291,25 @@ exports.date = function date(format, timestamp) {
   // Keep this here (works, but for code commented-out below for file size reasons)
   // var tal= [];
   const txt_words = [
-    'Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Satur',
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+    "Sun",
+    "Mon",
+    "Tues",
+    "Wednes",
+    "Thurs",
+    "Fri",
+    "Satur",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
   // trailing backslash -> (dropped)
   // a backslash followed by any character (including backslash) -> the character
@@ -306,7 +321,7 @@ exports.date = function date(format, timestamp) {
   const _pad = function (n, c) {
     n = String(n);
     while (n.length &lt; c) {
-      n = '0' + n;
+      n = "0" + n;
     }
     return n;
   };
@@ -318,8 +333,7 @@ exports.date = function date(format, timestamp) {
     },
     D() {
       // Shorthand day name; Mon...Sun
-      return f.l()
-        .slice(0, 3);
+      return f.l().slice(0, 3);
     },
     j() {
       // Day of month; 1..31
@@ -327,7 +341,7 @@ exports.date = function date(format, timestamp) {
     },
     l() {
       // Full day name; Monday...Sunday
-      return txt_words[f.w()] + 'day';
+      return txt_words[f.w()] + "day";
     },
     N() {
       // ISO-8601 day of week; 1[Mon]..7[Sun]
@@ -340,7 +354,7 @@ exports.date = function date(format, timestamp) {
       if (i &lt;= 3 &amp;&amp; parseInt((j % 100) / 10, 10) === 1) {
         i = 0;
       }
-      return [ 'st', 'nd', 'rd' ][i - 1] || 'th';
+      return ["st", "nd", "rd"][i - 1] || "th";
     },
     w() {
       // Day of week; 0[Sun]..6[Sat]
@@ -372,8 +386,7 @@ exports.date = function date(format, timestamp) {
     },
     M() {
       // Shorthand month name; Jan...Dec
-      return f.F()
-        .slice(0, 3);
+      return f.F().slice(0, 3);
     },
     n() {
       // Month; 1...12
@@ -381,15 +394,14 @@ exports.date = function date(format, timestamp) {
     },
     t() {
       // Days in month; 28...31
-      return (new Date(f.Y(), f.n(), 0))
-        .getDate();
+      return new Date(f.Y(), f.n(), 0).getDate();
     },
 
     // Year
     L() {
       // Is leap year?; 0 or 1
       const j = f.Y();
-      return j % 4 === 0 &amp; j % 100 !== 0 | j % 400 === 0;
+      return ((j % 4 === 0) &amp; (j % 100 !== 0)) | (j % 400 === 0);
     },
     o() {
       // ISO-8601 year
@@ -405,20 +417,17 @@ exports.date = function date(format, timestamp) {
     },
     y() {
       // Last two digits of year; 00...99
-      return f.Y()
-        .toString()
-        .slice(-2);
+      return f.Y().toString().slice(-2);
     },
 
     // Time
     a() {
       // am or pm
-      return jsdate.getHours() > 11 ? 'pm' : 'am';
+      return jsdate.getHours() > 11 ? "pm" : "am";
     },
     A() {
       // AM or PM
-      return f.a()
-        .toUpperCase();
+      return f.a().toUpperCase();
     },
     B() {
       // Swatch Internet time; 000..999
@@ -465,7 +474,7 @@ exports.date = function date(format, timestamp) {
       // timezone_abbreviations_list() function.
       /*              return that.date_default_timezone_get();
        */
-      throw new Error('Not supported (see source code of date() for timezone on how to add support)');
+      throw new Error("Not supported (see source code of date() for timezone on how to add support)");
     },
     I() {
       // DST observed?; 0 or 1
@@ -478,18 +487,18 @@ exports.date = function date(format, timestamp) {
       const b = new Date(f.Y(), 6);
       // Jul 1
       const d = Date.UTC(f.Y(), 6); // Jul 1 UTC
-      return ((a - c) !== (b - d)) ? 1 : 0;
+      return a - c !== b - d ? 1 : 0;
     },
     O() {
       // Difference to GMT in hour format; e.g. +0200
       const tzo = jsdate.getTimezoneOffset();
       const a = Math.abs(tzo);
-      return (tzo > 0 ? '-' : '+') + _pad(Math.floor(a / 60) * 100 + a % 60, 4);
+      return (tzo > 0 ? "-" : "+") + _pad(Math.floor(a / 60) * 100 + (a % 60), 4);
     },
     P() {
       // Difference to GMT w/colon; e.g. +02:00
       const O = f.O();
-      return (O.substr(0, 3) + ':' + O.substr(3, 2));
+      return O.substr(0, 3) + ":" + O.substr(3, 2);
     },
     T() {
       // Timezone abbreviation; e.g. EST, MDT, ...
@@ -518,7 +527,7 @@ exports.date = function date(format, timestamp) {
         }
       }
       */
-      return 'UTC';
+      return "UTC";
     },
     Z() {
       // Timezone offset in seconds (-43200...50400)
@@ -528,23 +537,25 @@ exports.date = function date(format, timestamp) {
     // Full Date/Time
     c() {
       // ISO-8601 date.
-      return 'Y-m-d\\TH:i:sP'.replace(formatChr, formatChrCb);
+      return "Y-m-d\\TH:i:sP".replace(formatChr, formatChrCb);
     },
     r() {
       // RFC 2822
-      return 'D, d M Y H:i:s O'.replace(formatChr, formatChrCb);
+      return "D, d M Y H:i:s O".replace(formatChr, formatChrCb);
     },
     U() {
       // Seconds since UNIX epoch
-      return jsdate / 1000 | 0;
+      return (jsdate / 1000) | 0;
     },
   };
   this.date = function (format, timestamp) {
     // eslint-disable-next-line
-    jsdate = (timestamp === undefined ? new Date() : // Not provided
-      (timestamp instanceof Date) ? new Date(timestamp) : // JS Date()
-        new Date(timestamp * 1000) // UNIX timestamp (auto-convert to int)
-      );
+    jsdate =
+      timestamp === undefined
+        ? new Date() // Not provided
+        : timestamp instanceof Date
+        ? new Date(timestamp) // JS Date()
+        : new Date(timestamp * 1000); // UNIX timestamp (auto-convert to int)
     return format.replace(formatChr, formatChrCb);
   };
   return this.date(format, timestamp);
@@ -557,7 +568,7 @@ exports.date = function date(format, timestamp) {
  */
 exports.noop = function noop(err) {
   if (err) {
-    console.error('noop callback: %s', err);
+    console.error("noop callback: %s", err);
   }
 };
 
@@ -568,7 +579,7 @@ exports.noop = function noop(err) {
  * @return {Boolean}
  */
 exports.isString = function isString(str) {
-  return (typeof str === 'string');
+  return typeof str === "string";
 };
 
 /**
@@ -578,7 +589,7 @@ exports.isString = function isString(str) {
  * @return {Boolean}
  */
 exports.isInteger = function isInteger(str) {
-  return (Math.round(str) === Number(str));
+  return Math.round(str) === Number(str);
 };
 
 /**
@@ -588,7 +599,7 @@ exports.isInteger = function isInteger(str) {
  * @return {Boolean}
  */
 exports.isNumber = function isNumber(str) {
-  return (!isNaN(str));
+  return !isNaN(str);
 };
 
 /**
@@ -628,16 +639,20 @@ exports.merge = function merge() {
  */
 exports.jsonStringify = function jsonStringify(data, space) {
   const seen = [];
-  return JSON.stringify(data, function (key, val) {
-    if (!val || typeof val !== 'object') {
+  return JSON.stringify(
+    data,
+    function (key, val) {
+      if (!val || typeof val !== "object") {
+        return val;
+      }
+      if (seen.indexOf(val) !== -1) {
+        return "[Circular]";
+      }
+      seen.push(val);
       return val;
-    }
-    if (seen.indexOf(val) !== -1) {
-      return '[Circular]';
-    }
-    seen.push(val);
-    return val;
-  }, space);
+    },
+    space,
+  );
 };
 
 /**
@@ -673,7 +688,7 @@ exports.throttleAsync = function throttleAsync(fn, maxCount) {
   return function () {
     const args = utils.argumentsToArray(arguments);
     const callback = utils.getArrayLastItem(args);
-    if (counter >= maxCount) return callback(new Error('throttleAsync() out of limit'));
+    if (counter >= maxCount) return callback(new Error("throttleAsync() out of limit"));
     args.pop();
     args.push(function () {
       counter -= 1;
@@ -788,18 +803,27 @@ exports.array.concat = function concat() {
  * @return {Function}
  */
 exports.customError = function customError(name, info) {
-  name = name || 'CustomError';
+  name = name || "CustomError";
   info = info || {};
-  const code = '' +
-'function ' + name + '(message, info2) {\n' +
-'  Error.captureStackTrace(this, ' + name + ');\n' +
-'  this.name = "' + name + '";\n' +
-'  this.message = (message || "");\n' +
-'  info2 = info2 || {};\n' +
-'  for (var i in info) this[i] = info[i];\n' +
-'  for (var i in info2) this[i] = info2[i];\n' +
-'}\n' +
-name + '.prototype = Error.prototype;' + name;
+  const code =
+    "" +
+    "function " +
+    name +
+    "(message, info2) {\n" +
+    "  Error.captureStackTrace(this, " +
+    name +
+    ");\n" +
+    '  this.name = "' +
+    name +
+    '";\n' +
+    '  this.message = (message || "");\n' +
+    "  info2 = info2 || {};\n" +
+    "  for (var i in info) this[i] = info[i];\n" +
+    "  for (var i in info2) this[i] = info2[i];\n" +
+    "}\n" +
+    name +
+    ".prototype = Error.prototype;" +
+    name;
   return eval(code);
 };
 
@@ -810,7 +834,7 @@ name + '.prototype = Error.prototype;' + name;
  * @return {Boolean}
  */
 exports.isPromise = function isPromise(p) {
-  return (p &amp;&amp; typeof p.then === 'function' &amp;&amp; typeof p.catch === 'function');
+  return p &amp;&amp; typeof p.then === "function" &amp;&amp; typeof p.catch === "function";
 };
 
 exports.promise = {};
@@ -862,10 +886,10 @@ exports.promise.all = function all(_args) {
     }
     args.forEach(function (p, i) {
       p.then(function (ret) {
-        results[i] = [ null, ret ];
+        results[i] = [null, ret];
         check();
       }).catch(function (err) {
-        results[i] = [ err ];
+        results[i] = [err];
         check();
       });
     });
@@ -882,10 +906,10 @@ exports.promise.all = function all(_args) {
  * @return {Number}
  */
 exports.ipToInt = function ipToInt(ip) {
-  const s = ip.split('.');
+  const s = ip.split(".");
   if (s.length !== 4) return false;
   for (let i = 0; i &lt; 4; i++) {
-    const v = s[i] = parseInt(s[i], 10);
+    const v = (s[i] = parseInt(s[i], 10));
     if (v &lt; 0 || v > 255) return false;
   }
   return s[0] * 16777216 + s[1] * 65536 + s[2] * 256 + s[3];
@@ -899,8 +923,8 @@ exports.ipToInt = function ipToInt(ip) {
  */
 exports.toBuffer = function toBuffer(data) {
   if (Buffer.isBuffer(data)) return data;
-  if (typeof data === 'string') return new Buffer(data);
-  throw new Error('invalid data type, must be string or buffer');
+  if (typeof data === "string") return new Buffer(data);
+  throw new Error("invalid data type, must be string or buffer");
 };
 
 /**
@@ -915,7 +939,7 @@ exports.encrypt = function encrypt(algorithm, key, data) {
   key = Buffer.isBuffer(key) ? key : keyHash(key);
   data = utils.toBuffer(data);
   const cipher = crypto.createCipheriv(algorithm, key, new Buffer(0));
-  const encrypted = [ cipher.update(data), cipher.final() ];
+  const encrypted = [cipher.update(data), cipher.final()];
   return Buffer.concat(encrypted);
 };
 
@@ -945,7 +969,7 @@ exports.decrypt = function decrypt(algorithm, key, data) {
   key = Buffer.isBuffer(key) ? key : keyHash(key);
   data = utils.toBuffer(data);
   const cipher = crypto.createDecipheriv(algorithm, key, new Buffer(0));
-  const encrypted = [ cipher.update(data), cipher.final() ];
+  const encrypted = [cipher.update(data), cipher.final()];
   return Buffer.concat(encrypted);
 };
 
@@ -965,7 +989,7 @@ exports.decryptStream = function decryptStream(algorithm, key, inStream) {
 
 function keyHash(data) {
   data = utils.toBuffer(data);
-  return crypto.createHash('sha256').update(data).digest();
+  return crypto.createHash("sha256").update(data).digest();
 }
 
 /**
@@ -983,7 +1007,7 @@ exports.hashTransform = function hashTransform(method, callback) {
       callback();
     },
   });
-  transform.once('finish', () => callback(null, cipher.digest()));
+  transform.once("finish", () => callback(null, cipher.digest()));
   return transform;
 };
 
@@ -1022,7 +1046,7 @@ exports.createPromiseCallback = function createPromiseCallback() {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jun 03 2017 17:53:44 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Jan 14 2021 15:37:36 GMT+0800 (China Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,36 +2,37 @@
   "name": "@leizm/utils",
   "version": "1.0.0",
   "description": "utils",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "index.js",
-    "bugfree.js",
-    "index.d.ts"
+    "lib/index.js",
+    "lib/bugfree.js",
+    "lib/index.d.ts"
   ],
   "scripts": {
     "test": "mocha -t 5000",
-    "lint": "eslint *.js test/*.js --fix",
-    "docs": "node build_docs && jsdoc -d docs index.js",
-    "prepublish": "npm run docs && npm run lint && npm test"
+    "format": "prettier --write lib",
+    "docs": "node ./tools/build_docs.js && jsdoc -d docs ./lib/index.js",
+    "prepublish": "npm run docs && npm run format && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/leizongmin/node-lei-utils.git"
+    "url": "https://github.com/leizongmin/leizm-utils.git"
   },
   "author": "Zongmin Lei <leizongmin@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/leizongmin/node-lei-utils/issues"
+    "url": "https://github.com/leizongmin/leizm-utils/issues"
   },
-  "homepage": "https://github.com/leizongmin/node-lei-utils",
-  "dependencies": {},
+  "homepage": "https://github.com/leizongmin/leizm-utils",
   "engines": {
     "node": ">= 4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^6.0.49",
-    "jsdoc": "^3.4.2",
-    "mocha": "^3.0.1"
+    "@types/node": "^14.14.20",
+    "jsdoc": "^3.6.6",
+    "mocha": "^8.2.1",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.3"
   }
 }
