@@ -10,8 +10,8 @@
     "lib/index.d.ts"
   ],
   "scripts": {
-    "test": "mocha -t 5000",
-    "format": "prettier --write lib",
+    "test": "mocha -t 5000 -- --trace-deprecation",
+    "format": "prettier --write lib && prettier --write test",
     "docs": "node ./tools/build_docs.js && jsdoc -d docs ./lib/index.js",
     "prepublish": "npm run docs && npm run format && npm test"
   },
