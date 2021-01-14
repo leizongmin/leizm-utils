@@ -1,6 +1,6 @@
 {
-  "name": "lei-utils",
-  "version": "3.1.1",
+  "name": "@leizm/utils",
+  "version": "1.0.0",
   "description": "utils",
   "main": "index.js",
   "types": "index.d.ts",
